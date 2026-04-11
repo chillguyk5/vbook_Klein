@@ -2,7 +2,7 @@
     "metadata": {
         "name": "Sáng Tác Việt Pro",
         "author": "Klein",
-        "version": 9,
+        "version": 10,
         "source": "http://103.82.20.93",
         "regexp": "(?:[\\w-]+\\.)*(?:sangtacviet\\.(?:app|pro|vip|com)|14\\.225\\.254\\.182|103\\.82\\.20\\.93)/truyen/[^/]+/\\d+/\\d+/?(?:[?#].*)?$",
         "description": "Sáng Tác Việt — tải chương qua proxy server bảo mật",
