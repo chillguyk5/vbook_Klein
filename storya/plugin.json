@@ -2,7 +2,7 @@
   "metadata": {
     "name": "Storya",
     "author": "Klien",
-    "version": 1,
+    "version": 2,
     "source": "https://storya.click",
     "regexp": "(www\\.)?storya\\.click/truyen/[a-zA-Z0-9-]+/?$",
     "description": "Đọc truyện trên Storya",

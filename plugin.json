@@ -7,9 +7,9 @@
     {
       "name": "Storya",
       "author": "Klein",
-      "path": "https://raw.githubusercontent.com/chillguyk5/vbook_Klein/main/storya/plugin.zip",
+      "path": "https://raw.githubusercontent.com/chillguyk5/vbook_Klein/main/storya/plugin.zip?v=2",
       "lib": "https://raw.githubusercontent.com/chillguyk5/vbook_Klein/main/storya/plugin.json",
-      "version": 1,
+      "version": 2,
       "source": "https://storya.click",
       "icon": "https://raw.githubusercontent.com/chillguyk5/vbook_Klein/main/storya/icon.png",
       "description": "Storya - Đọc truyện chữ online miễn phí",
@@ -19,9 +19,9 @@
     {
       "name": "Sáng Tác Việt Pro",
       "author": "Klein",
-      "path": "https://raw.githubusercontent.com/chillguyk5/vbook_Klein/main/stv/plugin.zip",
+      "path": "https://raw.githubusercontent.com/chillguyk5/vbook_Klein/main/stv/plugin.zip?v=14",
       "lib": "https://raw.githubusercontent.com/chillguyk5/vbook_Klein/main/stv/plugin.json",
-      "version": 13,
+      "version": 14,
       "source": "http://103.82.20.93",
       "icon": "https://raw.githubusercontent.com/chillguyk5/vbook_Klein/main/stv/icon.png",
       "description": "Sáng Tác Việt — tải chương qua proxy server bảo mật",
