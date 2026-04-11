@@ -15,6 +15,18 @@
       "description": "Storya - Đọc truyện chữ online miễn phí",
       "type": "novel",
       "locale": "vi_VN"
+    },
+    {
+      "name": "Sáng Tác Việt Pro",
+      "author": "Klein",
+      "path": "https://raw.githubusercontent.com/chillguyk5/vbook_Klein/main/stv/plugin.zip",
+      "lib": "https://raw.githubusercontent.com/chillguyk5/vbook_Klein/main/stv/plugin.json",
+      "version": 9,
+      "source": "http://103.82.20.93",
+      "icon": "https://raw.githubusercontent.com/chillguyk5/vbook_Klein/main/stv/icon.png",
+      "description": "Sáng Tác Việt — tải chương qua proxy server bảo mật",
+      "type": "chinese_novel",
+      "locale": "zh_CN"
     }
   ]
 }

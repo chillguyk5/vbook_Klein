@@ -1,0 +1,56 @@
+{
+    "metadata": {
+        "name": "Sáng Tác Việt Pro",
+        "author": "Klein",
+        "version": 9,
+        "source": "http://103.82.20.93",
+        "regexp": "(?:[\\w-]+\\.)*(?:sangtacviet\\.(?:app|pro|vip|com)|14\\.225\\.254\\.182|103\\.82\\.20\\.93)/truyen/[^/]+/\\d+/\\d+/?(?:[?#].*)?$",
+        "description": "Sáng Tác Việt — tải chương qua proxy server bảo mật",
+        "locale": "zh_CN",
+        "language": "javascript",
+        "type": "chinese_novel",
+        "encrypt": true
+    },
+    "script": {
+        "home": "home.js",
+        "genre": "genre.js",
+        "gen": "gen.js",
+        "gen_fq": "gen_fq.js",
+        "search": "search.js",
+        "detail": "detail.js",
+        "toc": "toc.js",
+        "chap": "chap.js",
+        "comment": "comment.js",
+        "suggest_fq": "suggest_fq.js",
+        "suggest": "suggest.js",
+        "gen_qd": "gen_qd.js"
+    },
+    "config": {
+        "thread_num": 1,
+        "delay": 12000,
+        "ai_mode": {
+            "title": "Chế độ dịch (llm/chinese) — mặc định: chinese (dùng AI thì đổi sang llm)",
+            "mode": "input",
+            "format": "text",
+            "default": "chinese"
+        },
+        "stv_origin": {
+            "title": "Host Sáng Tác Việt (IP hoặc domain)",
+            "mode": "input",
+            "format": "text",
+            "default": "http://103.82.20.93"
+        },
+        "proxy_url": {
+            "title": "Proxy Server URL",
+            "mode": "input",
+            "format": "text",
+            "default": "http://157.66.218.234"
+        },
+        "proxy_token": {
+            "title": "License Token",
+            "mode": "input",
+            "format": "password",
+            "default": ""
+        }
+    }
+}
