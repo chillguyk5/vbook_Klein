@@ -1,0 +1,22 @@
+{
+  "metadata": {
+    "name": "Storya",
+    "author": "Klien",
+    "version": 1,
+    "source": "https://storya.click",
+    "regexp": "(www\\.)?storya\\.click/truyen/[a-zA-Z0-9-]+/?$",
+    "description": "Đọc truyện trên Storya",
+    "locale": "vi_VN",
+    "type": "novel",
+    "language": "javascript"
+  },
+  "script": {
+    "home": "home.js",
+    "genre": "genre.js",
+    "detail": "detail.js",
+    "search": "search.js",
+    "toc": "toc.js",
+    "chap": "chap.js",
+    "list": "list.js"
+  }
+}

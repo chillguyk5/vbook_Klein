@@ -1,0 +1,20 @@
+{
+  "metadata": {
+    "author": "Klein",
+    "description": "VBook Extensions Repository"
+  },
+  "data": [
+    {
+      "name": "Storya",
+      "author": "Klein",
+      "path": "https://raw.githubusercontent.com/chillguyk5/vbook_Klein/main/storya/plugin.zip",
+      "lib": "https://raw.githubusercontent.com/chillguyk5/vbook_Klein/main/storya/plugin.json",
+      "version": 1,
+      "source": "https://storya.click",
+      "icon": "https://raw.githubusercontent.com/chillguyk5/vbook_Klein/main/storya/icon.png",
+      "description": "Storya - Đọc truyện chữ online miễn phí",
+      "type": "novel",
+      "locale": "vi_VN"
+    }
+  ]
+}
