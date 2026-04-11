@@ -2,7 +2,7 @@
     "metadata": {
         "name": "Sáng Tác Việt Pro",
         "author": "Klein",
-        "version": 11,
+        "version": 12,
         "source": "http://103.82.20.93",
         "regexp": "(?:[\\w-]+\\.)*(?:sangtacviet\\.(?:app|pro|vip|com)|14\\.225\\.254\\.182|103\\.82\\.20\\.93)/truyen/[^/]+/\\d+/\\d+/?(?:[?#].*)?$",
         "description": "Mua token liên hệ https://discord.gg/Z88h4t9U",
@@ -51,6 +51,12 @@
             "mode": "input",
             "format": "password",
             "default": ""
+        },
+        "token_notice": {
+            "title": "Thông báo mua token",
+            "mode": "input",
+            "format": "text",
+            "default": "Mua token liên hệ https://discord.gg/Z88h4t9U"
         }
     }
 }
