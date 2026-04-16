@@ -1,0 +1,37 @@
+{
+  "metadata": {
+    "name": "Dâm Cô Nương",
+    "author": "Klein",
+    "version": 2,
+    "source": "https://damconuong.cx",
+    "regexp": "(?:www\\.)?damconuong\\.(?:cx|ceo|plus)/truyen/[^/]+/?$",
+    "description": "Đọc truyện tranh 18+, hentai, manhwa trên Dâm Cô Nương",
+    "locale": "vi_VN",
+    "language": "javascript",
+    "type": "comic"
+  },
+  "script": {
+    "home": "home.js",
+    "genre": "genre.js",
+    "detail": "detail.js",
+    "search": "search.js",
+    "toc": "toc.js",
+    "chap": "chap.js"
+  },
+  "config": {
+    "thread_num": 1,
+    "delay": 3000,
+    "base_url": {
+      "title": "Tên miền Dâm Cô Nương (auto hoặc domain bất kỳ)",
+      "mode": "input",
+      "format": "text",
+      "default": "auto"
+    },
+    "fallback_domains": {
+      "title": "Danh sách domain fallback (cách nhau bằng dấu phẩy)",
+      "mode": "input",
+      "format": "text",
+      "default": "https://damconuong.cx,https://damconuong.ceo,https://damconuong.plus"
+    }
+  }
+}

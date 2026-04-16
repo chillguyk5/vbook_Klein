@@ -7,11 +7,11 @@
     {
       "name": "Storya",
       "author": "Klein",
-      "path": "https://raw.githubusercontent.com/chillguyk5/vbook_Klein/20412d9/storya/plugin.zip",
-      "lib": "https://raw.githubusercontent.com/chillguyk5/vbook_Klein/20412d9/storya/plugin.json",
+      "path": "https://raw.githubusercontent.com/chillguyk5/vbook_Klein/main/storya/plugin.zip",
+      "lib": "https://raw.githubusercontent.com/chillguyk5/vbook_Klein/main/storya/plugin.json",
       "version": 2,
       "source": "https://storya.click",
-      "icon": "https://raw.githubusercontent.com/chillguyk5/vbook_Klein/20412d9/storya/icon.png",
+      "icon": "https://raw.githubusercontent.com/chillguyk5/vbook_Klein/main/storya/icon.png",
       "description": "Storya - Đọc truyện chữ online miễn phí",
       "type": "novel",
       "locale": "vi_VN"
@@ -19,14 +19,26 @@
     {
       "name": "Sáng Tác Việt Pro",
       "author": "Klein",
-      "path": "https://raw.githubusercontent.com/chillguyk5/vbook_Klein/20412d9/stv/plugin.zip",
-      "lib": "https://raw.githubusercontent.com/chillguyk5/vbook_Klein/20412d9/stv/plugin.json",
-      "version": 14,
+      "path": "https://raw.githubusercontent.com/chillguyk5/vbook_Klein/main/stv/plugin.zip",
+      "lib": "https://raw.githubusercontent.com/chillguyk5/vbook_Klein/main/stv/plugin.json",
+      "version": 15,
       "source": "http://103.82.20.93",
-      "icon": "https://raw.githubusercontent.com/chillguyk5/vbook_Klein/20412d9/stv/icon.png",
+      "icon": "https://raw.githubusercontent.com/chillguyk5/vbook_Klein/main/stv/icon.png",
       "description": "Sáng Tác Việt — tải chương qua proxy server bảo mật",
       "type": "chinese_novel",
       "locale": "zh_CN"
+    },
+    {
+      "name": "Dâm Cô Nương",
+      "author": "Klein",
+      "path": "https://raw.githubusercontent.com/chillguyk5/vbook_Klein/main/damconuong/plugin.zip",
+      "lib": "https://raw.githubusercontent.com/chillguyk5/vbook_Klein/main/damconuong/plugin.json",
+      "version": 2,
+      "source": "https://damconuong.cx",
+      "icon": "https://raw.githubusercontent.com/chillguyk5/vbook_Klein/main/damconuong/icon.png",
+      "description": "Đọc truyện tranh 18+, hentai, manhwa trên Dâm Cô Nương",
+      "type": "comic",
+      "locale": "vi_VN"
     }
   ]
 }
