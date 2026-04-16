@@ -22,7 +22,7 @@
       "path": "https://raw.githubusercontent.com/chillguyk5/vbook_Klein/main/stv/plugin.zip",
       "lib": "https://raw.githubusercontent.com/chillguyk5/vbook_Klein/main/stv/plugin.json",
       "version": 15,
-      "source": "http://103.82.20.93/io/searchtp/searchBooks?minc=0&sort=viewweek&tag=",
+      "source": "https://sangtacviet.app",
       "icon": "https://raw.githubusercontent.com/chillguyk5/vbook_Klein/main/stv/icon.png",
       "description": "Sáng Tác Việt — tải chương qua proxy server bảo mật",
       "type": "chinese_novel",
