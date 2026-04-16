@@ -19,11 +19,11 @@
     {
       "name": "Sáng Tác Việt Pro",
       "author": "Klein",
-      "path": "https://raw.githubusercontent.com/chillguyk5/vbook_Klein/main/stv/plugin.zip",
-      "lib": "https://raw.githubusercontent.com/chillguyk5/vbook_Klein/main/stv/plugin.json",
+      "path": "https://raw.githubusercontent.com/chillguyk5/vbook_Klein/77b5a04/stv/plugin.zip",
+      "lib": "https://raw.githubusercontent.com/chillguyk5/vbook_Klein/77b5a04/stv/plugin.json",
       "version": 16,
       "source": "http://103.82.20.93",
-      "icon": "https://raw.githubusercontent.com/chillguyk5/vbook_Klein/main/stv/icon.png",
+      "icon": "https://raw.githubusercontent.com/chillguyk5/vbook_Klein/77b5a04/stv/icon.png",
       "description": "Sáng Tác Việt — tải chương qua proxy server bảo mật",
       "type": "chinese_novel",
       "locale": "zh_CN"
@@ -31,11 +31,11 @@
     {
       "name": "Dâm Cô Nương",
       "author": "Klein",
-      "path": "https://raw.githubusercontent.com/chillguyk5/vbook_Klein/main/damconuong/plugin.zip",
-      "lib": "https://raw.githubusercontent.com/chillguyk5/vbook_Klein/main/damconuong/plugin.json",
+      "path": "https://raw.githubusercontent.com/chillguyk5/vbook_Klein/77b5a04/damconuong/plugin.zip",
+      "lib": "https://raw.githubusercontent.com/chillguyk5/vbook_Klein/77b5a04/damconuong/plugin.json",
       "version": 3,
       "source": "https://damconuong.cx",
-      "icon": "https://raw.githubusercontent.com/chillguyk5/vbook_Klein/main/damconuong/icon.png",
+      "icon": "https://raw.githubusercontent.com/chillguyk5/vbook_Klein/77b5a04/damconuong/icon.png",
       "description": "Đọc truyện tranh 18+, hentai, manhwa trên Dâm Cô Nương",
       "type": "comic",
       "locale": "vi_VN"
