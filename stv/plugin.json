@@ -1,15 +1,14 @@
 {
     "metadata": {
         "name": "Sáng Tác Việt Pro",
-        "author": "Sáng Tác Việt",
+        "author": "Klein",
         "version": 33,
-        "source": "http://103.82.20.93",
+        "source": "https://103.82.20.93",
         "regexp": "(?:[\\w-]+\\.)*(?:sangtacviet\\.(?:app|pro|vip|com)|14\\.225\\.254\\.182|103\\.82\\.20\\.93)/truyen/[^/]+/\\d+/\\d+/?(?:[?#].*)?$",
         "description": "Sáng Tác Việt — tải chương qua proxy server bảo mật",
         "locale": "zh_CN",
         "language": "javascript",
-        "type": "chinese_novel",
-        "encrypt": true
+        "type": "chinese_novel"
     },
     "script": {
         "home": "home.js",
