@@ -2,7 +2,7 @@
   "metadata": {
     "name": "Dâm Cô Nương",
     "author": "Klein",
-    "version": 2,
+    "version": 3,
     "source": "https://damconuong.cx",
     "regexp": "(?:www\\.)?damconuong\\.(?:cx|ceo|plus)/truyen/[^/]+/?$",
     "description": "Đọc truyện tranh 18+, hentai, manhwa trên Dâm Cô Nương",
