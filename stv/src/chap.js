@@ -1,1 +1,229 @@
-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
+load("config.js");
+
+function execute(url) {
+    let meta = parseStvUrl(url);
+    if (!meta || !meta.chapterId) {
+        return Response.error("Không nhận diện được URL chương Sáng Tác Việt.");
+    }
+
+    if (!PROXY_URL) {
+        return Response.error("Chưa cấu hình Proxy Server URL. Vào Cài đặt plugin để nhập URL.");
+    }
+
+    if (!PROXY_TOKEN) {
+        return Response.error("Chưa nhập License Token. Vào Cài đặt plugin để nhập Token.");
+    }
+
+    let result = tryFetchChapterViaProxy(meta);
+    if (result.error) {
+        return Response.error(result.error);
+    }
+
+    return Response.success(result.data);
+}
+
+function captureStvProxyCookie(meta) {
+    var urls = [];
+    if (meta && meta.chapterId) {
+        urls.push(buildStvChapterUrl(meta, meta.chapterId));
+    }
+    if (meta) {
+        urls.push(buildStvBookUrl(meta));
+    }
+    for (var i = 0; i < urls.length; i++) {
+        try {
+            var probe = fetch(urls[i], { headers: { "User-Agent": STV_ANDROID_UA } });
+            if (probe && probe.request && probe.request.headers && probe.request.headers.cookie) {
+                var cookie = String(probe.request.headers.cookie || "").replace(/[\r\n]/g, "");
+                if (cookie) {
+                    return cookie;
+                }
+            }
+        } catch (probeErr) {}
+    }
+    return "";
+}
+
+function requestChapterViaFetch(endpoint, headers, body) {
+    try {
+        var response = fetch(endpoint, {
+            method: "POST",
+            headers: headers,
+            body: JSON.stringify(body)
+        });
+        var payload = null;
+        try { payload = response.json(); } catch (e) {}
+        return {
+            status: Number(response.status || 0),
+            ok: !!response.ok,
+            payload: payload,
+            networkError: false
+        };
+    } catch (error) {
+        return {
+            status: 0,
+            ok: false,
+            payload: null,
+            networkError: true,
+            error: error
+        };
+    }
+}
+
+function isProxyChapterSuccess(result) {
+    return !!(result && result.payload && Number(result.payload.code) === 0 && result.payload.data);
+}
+
+function isTransientProxyFailure(status, payload, result) {
+    var code = Number(status || 0);
+    var pCode = payload ? Number(payload.code || payload.reason || 0) : 0;
+    var text = payload && payload.error ? String(payload.error).toLowerCase() : "";
+
+    if (result && result.networkError) return true;
+    if (!code && !pCode) return true;
+
+    var transient = {
+        0: true,
+        408: true,
+        425: true,
+        429: true,
+        500: true,
+        502: true,
+        503: true,
+        504: true
+    };
+
+    if (transient[code] || transient[pCode]) return true;
+    if (text.indexOf("timeout") >= 0 || text.indexOf("gateway") >= 0 || text.indexOf("upstream") >= 0) return true;
+
+    return false;
+}
+
+function tryFetchChapterViaProxy(meta) {
+    var stvCookie = captureStvProxyCookie(meta);
+    var endpoint = PROXY_URL + "/stv/chapter";
+    var body = {
+        bookid: meta.bookId,
+        cid:    meta.chapterId,
+        host:   meta.host
+    };
+
+    if (stvCookie) {
+        body.stvCookie = stvCookie;
+    }
+
+    var headers = {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "User-Agent": STV_ANDROID_UA,
+        "X-License-Token": PROXY_TOKEN
+    };
+
+    var maxAttempts = 1;
+    var lastStatus = 0;
+    var lastPayload = null;
+    var hadNetworkError = false;
+
+    for (var attempt = 1; attempt <= maxAttempts; attempt++) {
+        var fetchResult = requestChapterViaFetch(endpoint, headers, body);
+
+        lastStatus = fetchResult.status;
+        lastPayload = fetchResult.payload;
+        hadNetworkError = hadNetworkError || !!fetchResult.networkError;
+
+        if (isProxyChapterSuccess(fetchResult)) {
+            return { data: fetchResult.payload.data };
+        }
+
+        if (attempt >= maxAttempts || !isTransientProxyFailure(lastStatus, lastPayload, fetchResult)) {
+            break;
+        }
+
+        sleep(Math.min(1200, 300 * attempt));
+    }
+
+    if (!lastPayload && !lastStatus && hadNetworkError) {
+        return { error: "Lỗi kết nối tới Proxy Server. Kiểm tra lại mạng và URL server." };
+    }
+
+    return { error: buildErrorMsg(lastStatus, lastPayload) };
+}
+
+function buildTokenStatusInfo(tokenInfo) {
+    if (!tokenInfo) {
+        return "";
+    }
+
+    var state = tokenInfo.active ? (tokenInfo.isExpired ? "Hết hạn" : "Đang hoạt động") : "Đã bị khóa";
+    var stats = tokenInfo.stats || {};
+    var parts = [];
+
+    parts.push("Trạng thái: " + state);
+
+    if (tokenInfo.tokenHint) {
+        parts.push("Token: " + tokenInfo.tokenHint);
+    }
+    if (tokenInfo.dailyLimit != null || tokenInfo.monthlyLimit != null) {
+        var dayPart = (stats.todayCount || 0) + "/" + (tokenInfo.dailyLimit != null ? tokenInfo.dailyLimit : "∞");
+        var monthPart = (stats.monthCount || 0) + "/" + (tokenInfo.monthlyLimit != null ? tokenInfo.monthlyLimit : "∞");
+        parts.push("Quota: ngày " + dayPart + ", tháng " + monthPart);
+    }
+    if (tokenInfo.proxyDisplay || tokenInfo.upstreamOrigin) {
+        parts.push("Route: " + (tokenInfo.proxyDisplay || "direct") + " -> " + (tokenInfo.upstreamOrigin || "-"));
+    }
+    if (tokenInfo.lastClientIp) {
+        parts.push("IP gần nhất: " + tokenInfo.lastClientIp);
+    }
+    if (stats.lastSeen) {
+        parts.push("Lần gọi cuối: " + String(stats.lastSeen).replace("T", " ").replace(/\.\d+Z$/, "Z"));
+    }
+
+    return parts.length ? "\n\n[Token Info]\n" + parts.join("\n") : "";
+}
+
+function buildErrorMsg(httpStatus, p) {
+    var tokenInfoText = buildTokenStatusInfo(p && p.tokenInfo ? p.tokenInfo : null);
+
+    var statusCode = httpStatus || 0;
+    var pCode = p && (p.code || p.reason) ? (Number(p.code) || 0) : 0;
+    if (!statusCode && pCode >= 400) {
+        statusCode = pCode;
+    }
+
+    if (statusCode === 401 || (p && p.code === 401)) {
+        return "[Token] Token không hợp lệ hoặc đã hết hạn.\nKiểm tra lại License Token trong Cài đặt plugin." + tokenInfoText;
+    }
+
+    if (statusCode === 429 || (p && p.code === 429)) {
+        let errText = (p && p.error) ? String(p.error) : "";
+
+        if (p && p.cooldown && p.retryAfter) {
+            let mins = Math.ceil(p.retryAfter / 60);
+            return "[Rate Limit] Token bị tạm khóa " + mins + " phút do gửi quá nhiều request liên tục.\nThử lại sau " + mins + " phút." + tokenInfoText;
+        }
+        if (errText.indexOf("ngày") !== -1) {
+            return "[Quota] Đã đạt giới hạn request trong ngày. Thử lại vào ngày mai." + tokenInfoText;
+        }
+        if (errText.indexOf("tháng") !== -1) {
+            return "[Quota] Đã đạt giới hạn request trong tháng. Thử lại vào tháng sau." + tokenInfoText;
+        }
+        return "[Rate Limit] Quá nhiều request. Chờ một chút rồi thử lại." + tokenInfoText;
+    }
+
+    if (statusCode === 500) {
+        return "[Server] Lỗi nội bộ proxy server. Thử lại sau." + tokenInfoText;
+    }
+    if (statusCode === 503) {
+        return "[Server] Proxy server đang bảo trì hoặc token chưa được gán proxy khả dụng. Thử lại sau." + tokenInfoText;
+    }
+
+    if (p && p.error) {
+        return "[STV] " + p.error + tokenInfoText;
+    }
+
+    if (statusCode && statusCode !== 200) {
+        return "[HTTP " + statusCode + "] Không kết nối được proxy server." + tokenInfoText;
+    }
+
+    return "Không tải được nội dung chương. Kiểm tra Proxy Server URL và License Token." + tokenInfoText;
+}

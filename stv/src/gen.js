@@ -1,1 +1,25 @@
-86IQSox0P1Xxsf9ROJ9uJpSeASGIoYesx0P1Xx6gTNI2SYz1ZdcNkMcqBTHuPSjlRuAoFtQs7AeKXIuoCx0P2XxFBLHexOx0P1XxKZF273VSdx0P2XxVFp0lyS3swbr8mEXMIWJqJg1V7pgI6EG3N4tBRiBi3GtBe85BIPqqZojwHWfAx0P2XxomI60QldB1Rfrvx0P1XxtvdVmMhGN48Rp6R2LcedvQuSakgGIsCfhjrB9nAJEnLKwcfJqeG5ziAG1EmZhMRLu6VxmpKNNNx0P1Xxnf8ph1BA8WjfUyr0W8bP4NQAo1sP2gzKoKEsWGrjifRq92cuWwukeYx0P2XxashBvCRx0P2XxY6ezfx4BOaPW57EYmDeb1L2tWMnoHQfRFyRW71j4K0x0P1XxIRNBBQwrpStxf2W1cQOUYrrDCaCFmrzw310kNamwinaG4KH03lgJeOQKgLsAKyw7sGIGGXQmUjd5wLWBS7taSd5NEsYn3Za6xkwlkEkfv7gl51GtOv2KBAImxksOIjk2YXZ7c5lrFndeOlrC0EXmnomdlrrJwDyzKiZEEklJg3NZm47HpA5r4eKGQtDt88ST8ESIy5YUXbBZGvr8bQYduVeX83CvvTAflV0kqgj3N6GwRNbdlHEuJZJ46bWQ3Nqq0tSjqHhEEx0P1Xxzx0P1XxtXDQYgzvgBoK81fQ7BZg2mSQHiyzZonRgONpRs06XzH236UJaY6k9BRJzbh8GL1egn73zWf5zPdrrfTzOMpYBLCBMAx0P2XxzCjGYrgQBpHNPZJpTaTvZhM0qnVV2G14oHbgxflvwWkce1iYi73b7VR1cyFbNFhGAZEN4TCWBSmbUNF38UX7CVQzHx0P2XxnqqIDwlqD2x0P2XxgOwVUKG9Q1Lz7Qkjvbg6viOk1lLXfuTXSRBH8cIJfB5PRbenGE5ttgEV1x0P2Xx1XxRIpRjiZjpA4sFol3ByTdwPvWAkibTi1k8LVUQvqk5QGIjSOqQx0P3Xxx0P3Xx
+﻿load("config.js");
+
+function execute(url, page) {
+    let pageNumber = parseInt(String(page || "1"), 10);
+    if (!pageNumber || pageNumber < 1) {
+        pageNumber = 1;
+    }
+
+    let pageText = String(pageNumber);
+
+    let targetUrl = normalizeStvUrl(url);
+    let separator = targetUrl.indexOf("?") >= 0 ? "&" : "?";
+    let response = fetch(targetUrl + separator + "p=" + pageText + "&page=" + pageText, {
+        headers: getStvHeaders()
+    });
+    if (!response.ok) {
+        return null;
+    }
+
+    let doc = response.html();
+    let items = parseStvListing(doc);
+    let next = items.length > 0 ? String(pageNumber + 1) : "";
+
+    return Response.success(items, next);
+}

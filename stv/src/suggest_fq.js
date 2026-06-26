@@ -1,1 +1,46 @@
-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
+load("config.js");
+
+function execute(input, page) {
+    if (!page) page = "0";
+    var url = "https://api5-normal-sinfonlinea.fqnovel.com/reading/reader/book/lastpage/recommend/v?limit=50&change_type=3&from=detailpage&book_id=" + input + "&type=0&aid=1967&version_code=62332&version_name=6.2.3.32&device_platform=android&os=android";
+    var response = fetch(url);
+    if (!response.ok) return null;
+    var json = response.json();
+    if (!json || !json.data) return null;
+
+    var items = [];
+    var filtered = json.data.filter(function(el) {
+        var score = parseFloat(el.score) || 0;
+        var readCount = parseInt(el.read_count) || 0;
+        return score >= 8.0 || readCount >= 50000;
+    });
+
+    filtered.sort(function(a, b) {
+        return (parseFloat(b.score) || 0) - (parseFloat(a.score) || 0);
+    });
+
+    filtered.slice(0, 20).forEach(function(el) {
+        if (!el.book_id) return;
+        var bookId = String(el.book_id);
+        var scoreDesc = el.score ? ("⭐ " + el.score + " ") : "";
+        items.push({
+            name: el.book_name || bookId,
+            link: STV_ORIGIN + "/truyen/fanqie/1/" + bookId + "/",
+            cover: replaceFqCover((el.thumb_url || "")),
+            description: scoreDesc + (el.author || ""),
+            host: STV_ORIGIN
+        });
+    });
+
+    return Response.success(items, "");
+}
+
+function replaceFqCover(u) {
+    if (!u) return null;
+    if (u.indexOf("https://") === 0) u = u.substring(8);
+    else if (u.indexOf("http://") === 0) u = u.substring(7);
+    else return null;
+    var parts = u.split("/");
+    parts[0] = "https://i0.wp.com/p6-novel.byteimg.com/origin";
+    return parts.map(function(x) { return x.split("~")[0].split("?")[0]; }).filter(Boolean).join("/");
+}

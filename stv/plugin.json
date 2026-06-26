@@ -38,7 +38,7 @@
             "title": "Proxy Server URL",
             "mode": "input",
             "format": "text",
-            "default": "http://127.0.0.1:3000"
+            "default": "http://110.172.28.216"
         },
         "proxy_token": {
             "title": "License Token (LH: t.me/kingoflion7749)",
