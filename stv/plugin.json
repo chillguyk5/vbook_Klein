@@ -8,7 +8,8 @@
         "description": "Sáng Tác Việt — tải chương qua proxy server bảo mật",
         "locale": "zh_CN",
         "language": "javascript",
-        "type": "chinese_novel"
+        "type": "chinese_novel",
+        "encrypt": true
     },
     "script": {
         "home": "home.js",
@@ -27,7 +28,7 @@
     },
     "config": {
         "thread_num": 1,
-        "delay": 3000,
+        "delay": 20000,
         "stv_transmode": {
             "title": "Che do chuong (chinese/name)",
             "mode": "input",
