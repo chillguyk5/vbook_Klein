@@ -1,0 +1,50 @@
+{
+  "metadata": {
+    "name": "Sáng Tác Việt Pro",
+    "author": "Sáng Tác Việt",
+    "version": 29,
+    "source": "http://103.82.20.93",
+    "regexp": "(?:[\\w-]+\\.)*(?:sangtacviet\\.(?:app|pro|vip|com)|14\\.225\\.254\\.182|103\\.82\\.20\\.93)/truyen/[^/]+/\\d+/\\d+/?(?:[?#].*)?$",
+    "description": "Sáng Tác Việt — tải chương qua proxy server bảo mật",
+    "locale": "zh_CN",
+    "language": "javascript",
+    "type": "chinese_novel"
+  },
+  "script": {
+    "home": "home.js",
+    "genre": "genre.js",
+    "gen": "gen.js",
+    "gen_fq": "gen_fq.js",
+    "gen_qd": "gen_qd.js",
+    "search": "search.js",
+    "detail": "detail.js",
+    "toc": "toc.js",
+    "chap": "chap.js",
+    "comment": "comment.js",
+    "suggest": "suggest.js",
+    "suggest_fq": "suggest_fq.js",
+    "comment_stv": "comment_stv.js"
+  },
+  "config": {
+    "thread_num": 1,
+    "delay": 20000,
+    "stv_transmode": {
+      "title": "Che do chuong (chinese/name)",
+      "mode": "input",
+      "format": "text",
+      "default": "chinese"
+    },
+    "proxy_url": {
+      "title": "Proxy Server URL",
+      "mode": "input",
+      "format": "text",
+      "default": "http://127.0.0.1:3000"
+    },
+    "proxy_token": {
+      "title": "License Token (LH: t.me/kingoflion7749)",
+      "mode": "input",
+      "format": "password",
+      "default": ""
+    }
+  }
+}
