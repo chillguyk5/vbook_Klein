@@ -1,1 +1,25 @@
-PtLyN5UWbDjtzZ0f6FxOxA4yXgHp7qacHbtziVGUP0rwY6Uy1FfOx0P2XxhLuBV8zZOfRbPSdc59e0r4IkTiyM9NJb0cnx0P2XxgD2sx0OoHh1UOFeAxO8KreBhmshzRCYFtz9jJsEEJDSgDJXsEBdEhx0P1XxRNg9afh97YXdmkhp17QneQOaRiz1Rfu7qMzCk6rCTmWoTUx4CjR0Gjx5ztts7zTn88jDrACmdkFL8vooBtCiuMnrpcbP6MZ1Sf7dzfy5HQx0P2Xx53p2A6sPDIWFM2KeSsbbk67KIlJN0MX7ouUpZFrxu99TJqPUhzyOygjrd0Ll2EjzS7cf34lSHk1PmMOUXxcNyCA19mfJ0WoNzCeTvx0P2XxDF7zzx0P1Xx9wyMTeyxlaHsux0P2Xxf4rWSy8ygyx0P1XxG3tWypx0P2XxERUgfSRiTty15Z2Kimx0P1Xx4O1vYvQ28sGzMo2oOx0P2XxGu63lBTCQbEPUMEYxx0P2XxdehOKxaOx0P1Xxk6BWmTsC2IQPVSx0P1XxkrG9OxN5OmjtLFhUEx0P1XxEKx0P1XxlNBlmxOjpJZyNoMMuFVcKKcxcLpzThp7qbuknsY874MrjhQegOK5WkPF7djrn927bAasSCP7iSdKqHLzsrSPNQwxRvMNEjx0P1XxCdhP958pbGSPcx0P1XxKhvL4ZZQx3uxD0eRz8KFZdk88NHOx3KDaPRipnCkHeUCx0P2XxU1fpqPdcNMZZxDh2r4QDoSJxTrlLCn5UXqLhtu7hKcckx0P1XxLux0P1XxY1QlyyTlUAqvKpe2L1QxZhOJntGQWj9h4twg5wup3C4WMkxxMwaD8CrPlca4nY5GtuNGpSHwx0P1XxTHBdHx0P2XxArnDqtlR2CDvt3kCsK3EpDHCuQTpaPyrxMGbYfeXK9U8TRXh645joKeP9uAq0Y5pqmLN0medxiopELUrRiXL4PExNIzf0gmlJLKXF3wNSuRWHi52Ib6py1Lm4j1ZoQscf6jqxhU3x0P1XxuFu0bKl6AAx0P3Xxx0P3Xx
+﻿load("config.js");
+
+function execute(url, page) {
+    let pageNumber = parseInt(String(page || "1"), 10);
+    if (!pageNumber || pageNumber < 1) {
+        pageNumber = 1;
+    }
+
+    let pageText = String(pageNumber);
+
+    let targetUrl = normalizeStvUrl(url);
+    let separator = targetUrl.indexOf("?") >= 0 ? "&" : "?";
+    let response = fetch(targetUrl + separator + "p=" + pageText + "&page=" + pageText, {
+        headers: getStvHeaders()
+    });
+    if (!response.ok) {
+        return null;
+    }
+
+    let doc = response.html();
+    let items = parseStvListing(doc);
+    let next = items.length > 0 ? String(pageNumber + 1) : "";
+
+    return Response.success(items, next);
+}

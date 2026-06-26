@@ -1,1 +1,20 @@
-PtLyN5UWbDjtzZ0f6FxOxA4yXgHp7qacHbtziVGUP0p58jqSNoIXg6bJW6bSNwbxAvsLphBYbRLNz4qgOtGCdmYuW4bjKpy4Un4uSPFhCQnMqGkuRdTYlu8KN981SinnH8pxzCAjFnhSswx2yKwbMcd5v3gtopBXtQmiYSzGdkRshemaKHFnEyx0P1XxnZ3n25xBpIJxDpKFaYTPK1elQNwO3pgOC5byHe93yDPFA3wJsdGWlUARd0uChx0P2XxILLXqYodx0P2XxTePvPqkyz6hA6HexZWDxT6chpH81wLofMx0P1Xx9XRcbHxgXQYx0P2XxleOewnCG0jxc8pDl7px0P2XxUOpV3GZ9whkXj94KNJSpzXx0P2XxYK5kIkxXq6w0DMweyRqteIhEDwx0P1XxPKcSspx0P2XxW34Vx6M4AUgodeZNhCfiMET7zx0P2Xxqxn9xEx0P2XxlyvD3DxbHZSuXF00eWaLzg3r6TljXzm0knqRodhf1a5JMXMzr7HxEHTlwqgRIx0P2XxfSmgxPk1Xq4XGaKZAW5nr3JAx0P2Xx9Uu5x0P1XxqUXSSerJxFGwpZx0P2XxICDGwWgDAdxbwZjYrn8fyDgY6ZOD1cac96cx0P1XxPK0aUjt1R39dNgc6MCNF4EBx0P2Xxjx0P1XxVvMnvjPiP44xqIftKBvUm3hT2aUOx0P1XxKjumyguezIZn5PowZtEbeEGETx0P2Xxx0P2XxDyTi3EpPCda6Z4okPvEqOYkq2vlrN5Grgk46OvJb2Ip1jSe5YeTi1BnUTDg0HQoeaE2Kwi
+﻿load("config.js");
+
+function execute(key, page) {
+    if (!page) {
+        page = "1";
+    }
+
+    let response = fetch(STV_ORIGIN + "/io/searchtp/searchBooks?find=&findinname=" + encodeURIComponent(key) + "&minc=0&sort=&tag=&page=" + page, {
+        headers: getStvHeaders()
+    });
+    if (!response.ok) {
+        return null;
+    }
+
+    let doc = response.html();
+    let items = parseStvListing(doc);
+    let next = items.length > 0 ? String(parseInt(page, 10) + 1) : "";
+
+    return Response.success(items, next);
+}
