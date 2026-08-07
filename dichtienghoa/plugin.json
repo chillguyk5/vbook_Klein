@@ -1,7 +1,7 @@
 {
     "metadata": {
         "name": "Dịch Tiếng Hoa",
-        "author": "B",
+        "author": "Klein",
         "version": 7,
         "source": "https://dichtienghoa.site",
         "regexp": "dichtienghoa\\.site/truyen/\\d+",
