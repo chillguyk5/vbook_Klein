@@ -1,0 +1,33 @@
+{
+  "metadata": {
+    "name": "HentaiCube",
+    "author": "Klein",
+    "version": 28,
+    "source": "https://hentaicube.xyz",
+    "regexp": "(?:www\\.)?hentaicube\\.xyz/(?:read|manga)/[^/]+/?$",
+    "description": "HentaiCube.",
+    "locale": "vi_VN",
+    "language": "javascript",
+    "type": "comic",
+    "tag": "nsfw",
+    "icon": "icon.png"
+  },
+  "script": {
+    "home": "home.js",
+    "genre": "genre.js",
+    "detail": "detail.js",
+    "search": "search.js",
+    "toc": "toc.js",
+    "chap": "chap.js"
+  },
+  "config": {
+    "thread_num": 1,
+    "delay": 800,
+    "base_url": {
+      "title": "Domain",
+      "mode": "input",
+      "format": "text",
+      "default": "https://hentaicube.xyz"
+    }
+  }
+}

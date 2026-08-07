@@ -1,0 +1,80 @@
+{
+  "metadata": {
+    "author": "Klein",
+    "description": "VBook Extensions Repository"
+  },
+  "data": [
+    {
+      "name": "Storya",
+      "author": "Klein",
+      "path": "https://raw.githubusercontent.com/chillguyk5/vbook_Klein/main/storya/plugin.zip",
+      "lib": "https://raw.githubusercontent.com/chillguyk5/vbook_Klein/main/storya/plugin.json",
+      "version": 2,
+      "source": "https://storya.click",
+      "icon": "https://raw.githubusercontent.com/chillguyk5/vbook_Klein/main/storya/icon.png",
+      "description": "Storya - Đọc truyện chữ online miễn phí",
+      "type": "novel",
+      "locale": "vi_VN"
+    },
+    {
+      "name": "Sáng Tác Việt Pro",
+      "author": "Klein",
+      "path": "https://raw.githubusercontent.com/chillguyk5/vbook_Klein/main/stv/plugin.zip",
+      "lib": "https://raw.githubusercontent.com/chillguyk5/vbook_Klein/main/stv/plugin.json",
+      "version": 34,
+      "source": "http://103.82.20.93",
+      "icon": "https://raw.githubusercontent.com/chillguyk5/vbook_Klein/main/stv/icon.png",
+      "description": "Sáng Tác Việt — Free 30c/day, VIP liên hệ Admin",
+      "type": "chinese_novel",
+      "locale": "zh_CN"
+    },
+    {
+      "name": "Dâm Cô Nương",
+      "author": "Klein",
+      "path": "https://raw.githubusercontent.com/chillguyk5/vbook_Klein/main/damconuong/plugin.zip",
+      "lib": "https://raw.githubusercontent.com/chillguyk5/vbook_Klein/main/damconuong/plugin.json",
+      "version": 4,
+      "source": "https://damconuong.cx",
+      "icon": "https://raw.githubusercontent.com/chillguyk5/vbook_Klein/main/damconuong/icon.png",
+      "description": "Đọc truyện tranh 18+, hentai, manhwa trên Dâm Cô Nương",
+      "type": "comic",
+      "locale": "vi_VN"
+    },
+    {
+      "name": "HentaiCube",
+      "author": "Klein",
+      "path": "https://raw.githubusercontent.com/chillguyk5/vbook_Klein/main/hentaicube/plugin.zip",
+      "lib": "https://raw.githubusercontent.com/chillguyk5/vbook_Klein/main/hentaicube/plugin.json",
+      "version": 28,
+      "source": "https://hentaicube.xyz",
+      "icon": "https://raw.githubusercontent.com/chillguyk5/vbook_Klein/main/hentaicube/icon.png",
+      "description": "HentaiCube - Đọc truyện tranh 18+, hentai từ HentaiCube",
+      "type": "comic",
+      "locale": "vi_VN"
+    },
+    {
+      "name": "Si Truyện CV",
+      "author": "Klein",
+      "path": "https://raw.githubusercontent.com/chillguyk5/vbook_Klein/main/Sitruyen/plugin.zip",
+      "lib": "https://raw.githubusercontent.com/chillguyk5/vbook_Klein/main/Sitruyen/plugin.json",
+      "version": 3,
+      "source": "https://sitruyencv.com",
+      "icon": "https://raw.githubusercontent.com/chillguyk5/vbook_Klein/main/Sitruyen/icon.png",
+      "description": "Đọc truyện từ trang Si Truyện CV (sitruyencv.com)",
+      "type": "novel",
+      "locale": "vi_VN"
+    },
+    {
+      "name": "Dịch Tiếng Hoa",
+      "author": "B",
+      "path": "https://raw.githubusercontent.com/chillguyk5/vbook_Klein/main/dichtienghoa/plugin.zip",
+      "lib": "https://raw.githubusercontent.com/chillguyk5/vbook_Klein/main/dichtienghoa/plugin.json",
+      "version": 7,
+      "source": "https://dichtienghoa.site",
+      "icon": "https://raw.githubusercontent.com/chillguyk5/vbook_Klein/main/dichtienghoa/icon.png",
+      "description": "Đọc truyện tại Dịch Tiếng Hoa — nội dung tiếng Trung gốc",
+      "type": "chinese_novel",
+      "locale": "zh_CN"
+    }
+  ]
+}

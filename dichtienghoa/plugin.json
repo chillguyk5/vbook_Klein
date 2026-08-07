@@ -1,0 +1,35 @@
+{
+    "metadata": {
+        "name": "Dịch Tiếng Hoa",
+        "author": "B",
+        "version": 7,
+        "source": "https://dichtienghoa.site",
+        "regexp": "dichtienghoa\\.site/truyen/\\d+",
+        "description": "Đọc truyện tại Dịch Tiếng Hoa (dichtienghoa.site) — nội dung tiếng Trung gốc",
+        "icon": "icon.png",
+        "locale": "zh_CN",
+        "language": "javascript",
+        "type": "chinese_novel"
+    },
+    "script": {
+        "home": "home.js",
+        "genre": "genre.js",
+        "gen": "gen.js",
+        "search": "search.js",
+        "detail": "detail.js",
+        "toc": "toc.js",
+        "chap": "chap.js"
+    },
+    "config": {
+        "username": {
+            "title": "Tài khoản (Email/Tên đăng nhập)",
+            "mode": "input",
+            "format": "text"
+        },
+        "password": {
+            "title": "Mật khẩu",
+            "mode": "input",
+            "format": "text"
+        }
+    }
+}
