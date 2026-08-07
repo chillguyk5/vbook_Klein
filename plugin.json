@@ -75,6 +75,18 @@
       "description": "Đọc truyện tại Dịch Tiếng Hoa — nội dung tiếng Trung gốc",
       "type": "chinese_novel",
       "locale": "zh_CN"
+    },
+    {
+      "name": "WebtoonScan",
+      "author": "Klein",
+      "path": "https://raw.githubusercontent.com/chillguyk5/vbook_Klein/main/webtoonscan/plugin.zip",
+      "lib": "https://raw.githubusercontent.com/chillguyk5/vbook_Klein/main/webtoonscan/plugin.json",
+      "version": 1,
+      "source": "https://webtoonscan.com",
+      "icon": "https://raw.githubusercontent.com/chillguyk5/vbook_Klein/main/webtoonscan/icon.png",
+      "description": "Đọc manhwa, webtoon tại WebtoonScan.com",
+      "type": "comic",
+      "locale": "vi_VN"
     }
   ]
 }

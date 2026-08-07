@@ -1,0 +1,34 @@
+{
+    "metadata": {
+        "name": "WebtoonScan",
+        "author": "Klein",
+        "version": 1,
+        "source": "https://webtoonscan.com",
+        "regexp": "(?:www\\.)?webtoonscan\\.com/(?:manhwa|manga|webtoon|comic)/[^/]+/?$",
+        "description": "Đọc manhwa, webtoon tại WebtoonScan.com",
+        "icon": "icon.png",
+        "locale": "vi_VN",
+        "language": "javascript",
+        "type": "comic",
+        "encrypt": true
+    },
+    "script": {
+        "home": "home.js",
+        "genre": "genre.js",
+        "gen": "gen.js",
+        "search": "search.js",
+        "detail": "detail.js",
+        "toc": "toc.js",
+        "chap": "chap.js"
+    },
+    "config": {
+        "thread_num": 1,
+        "delay": 3000,
+        "base_url": {
+            "title": "Tên miền WebtoonScan (auto hoặc domain bất kỳ)",
+            "mode": "input",
+            "format": "text",
+            "default": "https://webtoonscan.com"
+        }
+    }
+}

@@ -3,3 +3,5 @@ node_modules/
 .env
 .DS_Store
 Thumbs.db
+# Chỉ dùng local, không đăng lên GitHub
+CLAUDE.md
