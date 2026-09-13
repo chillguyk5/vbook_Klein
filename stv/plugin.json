@@ -2,9 +2,9 @@
     "metadata": {
         "name": "Sáng Tác Việt Pro",
         "author": "Klein",
-        "version": 47,
+        "version": 48,
         "source": "https://103.82.20.93",
-        "regexp": "(?:[\\w-]+\\.)*(?:sangtacviet\\.(?:app|pro|vip|com)|14\\.225\\.254\\.182|103\\.82\\.20\\.93)/truyen/[^/]+/\\d+/\\d+/?(?:[?#].*)?$",
+        "regexp": "(?:[\\w-]+\\.)*(?:sangtacviet\\.(?:app|pro|vip|com)|14\\.225\\.254\\.182|103\\.82\\.20\\.93|dns1\\.stv-appdomain-\\d+\\.org)/truyen/[^/]+/\\d+/\\d+(?:/\\d+)?/?(?:[?#].*)?$",
         "description": "Sáng Tác Việt — Free 30c/day, VIP liên hệ Admin",
         "locale": "zh_CN",
         "language": "javascript",
@@ -29,12 +29,6 @@
     "config": {
         "thread_num": 1,
         "delay": 20000,
-        "stv_transmode": {
-            "title": "Che do chuong (chinese/name)",
-            "mode": "input",
-            "format": "text",
-            "default": "chinese"
-        },
         "proxy_url": {
             "title": "Proxy Server URL",
             "mode": "input",
