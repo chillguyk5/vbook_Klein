@@ -2,7 +2,7 @@
     "metadata": {
         "name": "Sáng Tác Việt Pro",
         "author": "Klein",
-        "version": 48,
+        "version": 49,
         "source": "https://103.82.20.93",
         "regexp": "(?:[\\w-]+\\.)*(?:sangtacviet\\.(?:app|pro|vip|com)|14\\.225\\.254\\.182|103\\.82\\.20\\.93|dns1\\.stv-appdomain-\\d+\\.org)/truyen/[^/]+/\\d+/\\d+(?:/\\d+)?/?(?:[?#].*)?$",
         "description": "Sáng Tác Việt — Free 30c/day, VIP liên hệ Admin",
