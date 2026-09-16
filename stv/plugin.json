@@ -36,7 +36,7 @@
             "default": "chinese"
         },
         "stv_notice": {
-            "title": "Đọc bản đầy đủ: mở trình duyệt trong app vBook, vào https://dns1.stv-appdomain-00000001.org và đăng nhập tài khoản Sáng Tác Việt (cần VIP). Plugin tự lấy phiên đó — KHÔNG nhập mật khẩu vào plugin.",
+            "title": "Đọc bản đầy đủ của tấn giang, faloo, ciwemao: mở trình duyệt trong app vBook, vào trang nguồn và đăng nhập tài khoản Sáng Tác Việt (cần VIP). Plugin tự lấy phiên đó — KHÔNG nhập mật khẩu vào plugin.",
             "mode": "input",
             "format": "text",
             "default": ""
