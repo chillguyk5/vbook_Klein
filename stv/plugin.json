@@ -2,7 +2,7 @@
     "metadata": {
         "name": "Sáng Tác Việt Pro",
         "author": "Klein",
-        "version": 50,
+        "version": 51,
         "source": "https://103.82.20.93",
         "regexp": "(?:[\\w-]+\\.)*(?:sangtacviet\\.(?:app|pro|vip|com)|14\\.225\\.254\\.182|103\\.82\\.20\\.93|dns1\\.stv-appdomain-\\d+\\.org)/truyen/[^/]+/\\d+/\\d+(?:/\\d+)?/?(?:[?#].*)?$",
         "description": "Sáng Tác Việt — Free 30c/day, VIP liên hệ Admin",
@@ -29,6 +29,18 @@
     "config": {
         "thread_num": 1,
         "delay": 20000,
+        "stv_transmode": {
+            "title": "Che do chuong (chinese/name)",
+            "mode": "input",
+            "format": "text",
+            "default": "chinese"
+        },
+        "stv_notice": {
+            "title": "Đọc bản đầy đủ: mở trình duyệt trong app vBook, vào https://dns1.stv-appdomain-00000001.org và đăng nhập tài khoản Sáng Tác Việt (cần VIP). Plugin tự lấy phiên đó — KHÔNG nhập mật khẩu vào plugin.",
+            "mode": "input",
+            "format": "text",
+            "default": ""
+        },
         "proxy_url": {
             "title": "Proxy Server URL",
             "mode": "input",
