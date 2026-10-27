@@ -3,8 +3,8 @@
     "name": "Dâm Cô Nương",
     "author": "Klein",
     "version": 4,
-    "source": "https://damconuong.cx",
-    "regexp": "(?:www\\.)?damconuong\\.(?:cx|ceo|plus)/truyen/[^/]+/?$",
+    "source": "https://damconuong.win",
+    "regexp": "(?:www\\.)?damconuong\\.(?:win|pet|mobi|cx|ceo|plus)/truyen/[^/]+/?$",
     "description": "Đọc truyện tranh 18+, hentai, manhwa trên Dâm Cô Nương",
     "locale": "vi_VN",
     "language": "javascript",
@@ -31,7 +31,7 @@
       "title": "Danh sách domain fallback (cách nhau bằng dấu phẩy)",
       "mode": "input",
       "format": "text",
-      "default": "https://damconuong.cx,https://damconuong.ceo,https://damconuong.plus"
+      "default": "https://damconuong.pet,https://damconuong.mobi,https://damconuong.cx,https://damconuong.ceo,https://damconuong.plus"
     }
   }
 }

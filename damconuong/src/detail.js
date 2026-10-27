@@ -1,5 +1,10 @@
 load('config.js');
 
+// Layout mới (2026-10, damconuong.win): h1.md-title, p.md-alt, .md-badges
+// (tình trạng), .md-stats (views/follows), .md-synopsis (mô tả), info dạng
+// <dl><dt>Tác giả</dt><dd><a class="md-chip">…</a></dd></dl>. Ảnh bìa không
+// còn img.cover — dùng og:image. Giữ toàn bộ nhánh layout cũ làm fallback.
+
 function getDetailCard(doc) {
     var card = null;
 
@@ -43,6 +48,67 @@ function getMetaValue(card, label) {
     return value;
 }
 
+// Layout mới: giá trị info nằm trong <div><dt>label</dt><dd>…</dd></div>.
+// Quét div chứa dt đúng nhãn rồi lấy nội dung dd (div trong cùng cùng khớp,
+// nhưng dd.first() vẫn là dd của dt đó nên kết quả như nhau).
+function getDlValue(doc, label) {
+    var found = "";
+
+    doc.select("div").forEach(function(node) {
+        if (found) return;
+        var dt = node.select("dt").first();
+        if (!dt || cleanText(dt.text()) !== label) return;
+        var dd = node.select("dd").first();
+        if (!dd) return;
+
+        var link = dd.select("a").first();
+        found = cleanText(link ? link.text() : dd.text());
+    });
+
+    return found;
+}
+
+// Thể loại: dd của dt "Thể loại" chứa nhiều a.md-chip → /the-loai/…
+function getDlGenres(doc, label) {
+    var genres = [];
+    var seen = {};
+
+    doc.select("div").forEach(function(node) {
+        if (genres.length) return;
+        var dt = node.select("dt").first();
+        if (!dt || cleanText(dt.text()) !== label) return;
+
+        node.select("dd a[href*='/the-loai/']").forEach(function(a) {
+            var genreTitle = cleanText(a.text());
+            var genreUrl = normalizeUrl(a.attr("href"));
+            if (!genreTitle || !genreUrl || seen[genreUrl]) return;
+            seen[genreUrl] = true;
+            genres.push({
+                title: genreTitle,
+                input: genreUrl,
+                script: "gen.js"
+            });
+        });
+    });
+
+    return genres;
+}
+
+// .md-stats: <li><strong>2.8K</strong><span>lượt xem</span></li>
+function getStatValue(doc, keyword) {
+    var value = "";
+
+    doc.select(".md-stats li").forEach(function(li) {
+        if (value) return;
+        var text = cleanText(li.text());
+        if (text.indexOf(keyword) < 0) return;
+        var strong = li.select("strong").first();
+        value = strong ? cleanText(strong.text()) : "";
+    });
+
+    return value;
+}
+
 function getDescription(doc, card, title) {
     var description = "";
 
@@ -60,6 +126,14 @@ function getDescription(doc, card, title) {
 
         description = text;
     });
+
+    if (!description) {
+        var synopsis = doc.select(".md-synopsis").first();
+        if (synopsis) {
+            var p = synopsis.select("p").first();
+            description = cleanText(p ? p.text() : synopsis.text());
+        }
+    }
 
     if (!description && card) {
         card.select("p,div").forEach(function(node) {
@@ -123,13 +197,39 @@ function getDescription(doc, card, title) {
     return description;
 }
 
-function getGenres(card) {
-    var genres = [];
+// Ảnh bìa: og:image luôn có trên trang mới; fallback meta thumbnail /
+// img có alt trùng tên truyện / img.cover kiểu cũ.
+function getCover(doc, card, title) {
+    var ogImage = cleanText(doc.select("meta[property='og:image']").attr("content"));
+    if (ogImage) return normalizeUrl(ogImage);
+
+    var thumb = cleanText(doc.select("meta[name='thumbnail']").attr("content"));
+    if (thumb) return normalizeUrl(thumb);
+
+    if (title) {
+        var byAlt = null;
+        doc.select("img[alt]").forEach(function(img) {
+            if (byAlt || !cleanText(img.attr("alt"))) return;
+            if (cleanText(img.attr("alt")) === title) byAlt = img;
+        });
+        if (byAlt) return normalizeUrl(byAlt.attr("src"));
+    }
+
+    var coverNode = card ? card.select("img.cover").first() : doc.select("img.cover").first();
+    if (!coverNode && card) {
+        coverNode = card.select("img").first();
+    }
+    return coverNode ? normalizeUrl(coverNode.attr("src")) : "";
+}
+
+function getGenres(doc, card) {
+    var genres = getDlGenres(doc, "Thể loại");
+    if (genres.length) return genres;
+
     var seen = {};
+    var pool = card || doc;
 
-    if (!card) return genres;
-
-    card.select("a[href*='/the-loai/']").forEach(function(node) {
+    pool.select("a[href*='/the-loai/']").forEach(function(node) {
         var genreTitle = cleanText(node.text());
         var genreUrl = normalizeUrl(node.attr("href"));
         if (!genreTitle || !genreUrl || seen[genreUrl]) return;
@@ -165,6 +265,22 @@ function getFirstText(root, selector) {
     return node ? cleanText(node.text()) : "";
 }
 
+// Lần cuối cập nhật: ld+json "@type":"Book" -> dateModified (layout mới).
+function getLastUpdated(doc) {
+    var out = "";
+
+    doc.select("script[type='application/ld+json']").forEach(function(node) {
+        if (out) return;
+        var raw = cleanText(node.html());
+        if (!raw || raw.indexOf('"@type":"Book"') < 0) return;
+
+        var m = /"dateModified":"([^"]+)"/.exec(raw);
+        if (m) out = cleanText(m[1]).replace("T", " ").slice(0, 16);
+    });
+
+    return out;
+}
+
 function execute(url) {
     url = normalizeUrl(url);
 
@@ -173,20 +289,19 @@ function execute(url) {
         var doc = response.html();
         var detailCard = getDetailCard(doc);
         var title = cleanText(doc.select("main h1").last().text());
-        var coverNode = detailCard ? detailCard.select("img.cover").first() : doc.select("img.cover").first();
-        if (!coverNode && detailCard) {
-            coverNode = detailCard.select("img").first();
-        }
 
-        var cover = coverNode ? normalizeUrl(coverNode.attr("src")) : "";
-        var author = getFirstText(detailCard, "a[href*='/tac-gia/']");
-        var translator = getFirstText(detailCard, "a[href*='/nhom-dich/']");
-        var alias = getMetaValue(detailCard, "Tên khác:");
-        var status = getMetaValue(detailCard, "Tình trạng:");
-        var updatedAt = getMetaValue(detailCard, "Lần cuối:");
-        var views = getMetaValue(detailCard, "Lượt xem:");
+        var author = getDlValue(doc, "Tác giả") ||
+            getFirstText(detailCard, "a[href*='/tac-gia/']") ||
+            getFirstText(doc, "a[href*='/tac-gia/']");
+        var translator = getDlValue(doc, "Nhóm dịch") ||
+            getFirstText(detailCard, "a[href*='/nhom-dich/']") ||
+            getFirstText(doc, "a[href*='/nhom-dich/']");
+        var alias = cleanText(doc.select("p.md-alt").first().text()) || getMetaValue(detailCard, "Tên khác:");
+        var status = getFirstText(doc, ".md-badges .md-badge") || getMetaValue(detailCard, "Tình trạng:");
+        var updatedAt = getLastUpdated(doc) || getMetaValue(detailCard, "Lần cuối:");
+        var views = getStatValue(doc, "lượt xem") || getMetaValue(detailCard, "Lượt xem:");
         var description = getDescription(doc, detailCard, title);
-        var genres = getGenres(detailCard);
+        var genres = getGenres(doc, detailCard);
         var suggestHtml = getSuggestSectionHtml(doc);
 
         var detail = [];
@@ -197,13 +312,22 @@ function execute(url) {
         if (updatedAt) detail.push("Lần cuối: " + updatedAt);
         if (views) detail.push("Lượt xem: " + views);
 
+        var ongoing;
+        if (status) {
+            ongoing = status.toLowerCase().indexOf("hoàn thành") < 0;
+        } else {
+            // layout mới không có badge → coi như đang ra; layout cũ không
+            // đọc được status thì giữ hành vi cũ (false khi có detail card)
+            ongoing = !detailCard;
+        }
+
         var result = {
             name: title,
-            cover: cover,
+            cover: getCover(doc, detailCard, title),
             author: author,
             description: description,
             detail: detail.join("<br>"),
-            ongoing: status.indexOf("Đang tiến hành") >= 0,
+            ongoing: ongoing,
             genres: genres,
             host: BASE_URL
         };

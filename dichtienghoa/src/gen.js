@@ -55,19 +55,6 @@ function parseInput(url) {
     return { mode: "home", section: "recent" };
 }
 
-function fromHomeBootstrap(section) {
-    var res = apiFetch("/api/home/bootstrap", { referer: BASE_URL + "/" });
-    if (!res || !res.ok) return null;
-    var json = parseJson(res);
-    var root = (json && json.data) ? json.data : json;
-    if (!root) return null;
-    var block = root[section];
-    var arr = [];
-    if (block && block.data && Array.isArray(block.data)) arr = block.data;
-    else if (Array.isArray(block)) arr = block;
-    return Response.success(mapList(arr), null);
-}
-
 function fromRankingBootstrap(section) {
     var res = apiFetch("/api/ranking/bootstrap", { referer: BASE_URL + "/xep-hang" });
     if (!res || !res.ok) return null;
@@ -89,7 +76,8 @@ function fromStoryApi(opt, page) {
     if (opt.category) qs += "&categories=" + encodeURIComponent(opt.category);
 
     var res = apiFetch("/api/models/story?" + qs);
-    if (!res || !res.ok) return null;
+    if (!res) return null;
+    if (!res.ok) return Response.error("API lỗi (" + res.status + ") khi tải danh sách truyện");
     var json = parseJson(res);
     if (!json || !json.data) return Response.success([], null);
 
@@ -99,20 +87,19 @@ function fromStoryApi(opt, page) {
         hasMore = json.pagination.hasMore === true ||
             (json.pagination.totalPages != null && parseInt(page) < json.pagination.totalPages);
     } else {
-        hasMore = json.data.length >= 40;
+        hasMore = json.data.length >= 48;
     }
     return Response.success(data, hasMore ? String(parseInt(page) + 1) : null);
 }
 
 function execute(url, page) {
     if (!page) page = "1";
-    loginIfNeeded();
 
     var opt = parseInput(url);
 
     if (opt.mode === "home") {
-        var homeRes = fromHomeBootstrap(opt.section);
-        if (homeRes) return homeRes;
+        // bootstrap recent/completed blocks are capped (~24-30 items, no paging);
+        // the story API with the same sort scrolls properly.
         if (opt.section === "completed") return fromStoryApi({ sort: "completed" }, page);
         return fromStoryApi({ sort: "updatedAt" }, page);
     }

@@ -1,7 +1,6 @@
 load("config.js");
 
 function execute() {
-    loginIfNeeded();
     return Response.success([
         { title: "Mới cập nhật", input: "home:recent", script: "gen.js" },
         { title: "Truyện mới", input: "story:createdAt", script: "gen.js" },

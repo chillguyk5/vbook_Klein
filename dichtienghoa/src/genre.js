@@ -1,9 +1,8 @@
 load("config.js");
 
 function execute() {
-    loginIfNeeded();
 
-    var list = [{ title: "Tất cả", input: BASE_URL + "/tim-kiem", script: "gen.js" }];
+    var list = [{ title: "Tất cả", input: "story:updatedAt", script: "gen.js" }];
     var res = apiFetch("/api/models/category?pageSize=100");
     var json = parseJson(res);
     var cats = (json && json.data) ? json.data : [];

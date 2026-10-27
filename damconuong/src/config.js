@@ -1,10 +1,15 @@
-var DAM_DEFAULT_BASE_URL = "https://damconuong.cx";
+// Site chuyển sang .win (2026-10: .pet 301 -> .win). Domain cũ vẫn giữ làm
+// fallback vì còn 301 sang .win, nhưng để .win đứng đầu để khỏi mất 1 hop.
+var DAM_DEFAULT_BASE_URL = "https://damconuong.win";
 var DAM_FALLBACK_BASES = [
+    "https://damconuong.win",
+    "https://damconuong.pet",
+    "https://damconuong.mobi",
     "https://damconuong.cx",
     "https://damconuong.ceo",
     "https://damconuong.plus"
 ];
-var BASE_CACHE_KEY = "damconuong.base.v1";
+var BASE_CACHE_KEY = "damconuong.base.v3";
 var BASE_CACHE_TTL_MS = 30 * 60 * 1000;
 
 function normalizeBaseUrl(baseUrl) {

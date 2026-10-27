@@ -60,20 +60,46 @@ function crawlContent(sourceUrl, storyId, chapterId) {
 
 function execute(url) {
     if (!url) return null;
-    loginIfNeeded();
 
     var ids = extractChapterIds(url);
     if (!ids) return null;
     var storyId = ids.storyId;
     var chapterId = ids.chapterId;
 
-    var res = apiFetch("/api/models/chapter/" + chapterId, {
-        referer: BASE_URL + "/truyen/" + storyId + "/" + chapterId
-    });
+    // Fast path from ?su embedded in toc urls: light crawl response (~6KB)
+    // instead of the ~120KB chapter payload (96KB translatedContent unused).
+    // Require real prose length so paywalled junk text falls through to full path.
+    var suM = String(url).match(/[?&]su=([^&]+)/);
+    if (suM) {
+        var srcUrl = "";
+        try { srcUrl = decodeURIComponent(suM[1]); } catch (e) {}
+        if (srcUrl) {
+            var crawled = crawlContent(srcUrl, storyId, chapterId);
+            if (crawled && String(crawled).length >= 150) {
+                return Response.success(formatContent(stripLeadingTitle(crawled)));
+            }
+        }
+    }
 
+    loginIfNeeded();
+    var referer = BASE_URL + "/truyen/" + storyId + "/" + chapterId;
+
+    var res = apiFetch("/api/models/chapter/" + chapterId, { referer: referer });
     if (!res) return null;
-    if (res.status === 401) return Response.error("Chương VIP yêu cầu đăng nhập.");
-    if (res.status === 402) return Response.error("Bạn cần mua chương VIP này trước khi đọc.");
+
+    if (res.status === 401 || res.status === 402) {
+        if (autoBuyOn() && hasCredentials()) {
+            var buy = buyChapter(chapterId, referer);
+            if (!buy.ok) return Response.error("Không tự mua chương: " + buy.message);
+            res = apiFetch("/api/models/chapter/" + chapterId, { referer: referer });
+            if (!res) return null;
+            if (!res.ok) return Response.error("Đã mua nhưng chương vẫn bị khóa, thử lại sau.");
+        } else if (res.status === 401) {
+            return Response.error("Chương VIP yêu cầu đăng nhập.");
+        } else {
+            return Response.error("Bạn cần mua chương VIP này trước khi đọc.");
+        }
+    }
     if (res.status === 403) return Response.error("Truy cập bị chặn (403). Thử đăng nhập lại.");
     if (!res.ok) return null;
 

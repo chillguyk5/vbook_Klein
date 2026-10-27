@@ -12,14 +12,14 @@ function mapStory(item) {
 
 function execute(key, page) {
     if (!page) page = "1";
-    loginIfNeeded();
 
     var qs = "q=" + encodeURIComponent(key) +
         "&sort=updatedAt:desc&fast=1&page=" + encodeURIComponent(page) +
         "&pageSize=48";
 
     var res = apiFetch("/api/models/story?" + qs);
-    if (!res || !res.ok) return null;
+    if (!res) return null;
+    if (!res.ok) return Response.error("API lỗi (" + res.status + ") khi tìm kiếm");
 
     var json = parseJson(res);
     if (!json || !json.data || !json.data.length) return Response.success([], null);
@@ -34,7 +34,7 @@ function execute(key, page) {
         hasMore = json.pagination.hasMore === true ||
             (json.pagination.totalPages != null && parseInt(page) < json.pagination.totalPages);
     } else {
-        hasMore = json.data.length >= 40;
+        hasMore = json.data.length >= 48;
     }
 
     return Response.success(data, hasMore ? String(parseInt(page) + 1) : null);

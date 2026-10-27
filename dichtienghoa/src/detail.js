@@ -1,14 +1,14 @@
 load("config.js");
 
 function execute(url) {
-    loginIfNeeded();
     var storyId = extractStoryId(url);
     if (!storyId) return null;
 
     var res = apiFetch("/api/models/story/" + storyId, {
         referer: BASE_URL + "/truyen/" + storyId
     });
-    if (!res || !res.ok) return null;
+    if (!res) return null;
+    if (!res.ok) return Response.error("API lỗi (" + res.status + ") khi tải thông tin truyện");
 
     var json = parseJson(res);
     var d = (json && json.data) ? json.data : json;

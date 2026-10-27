@@ -2,10 +2,10 @@
     "metadata": {
         "name": "Dịch Tiếng Hoa",
         "author": "Klein",
-        "version": 7,
-        "source": "https://dichtienghoa.site",
-        "regexp": "dichtienghoa\\.site/truyen/\\d+",
-        "description": "Đọc truyện tại Dịch Tiếng Hoa (dichtienghoa.site) — nội dung tiếng Trung gốc",
+        "version": 14,
+        "source": "https://dichtienghoa.net",
+        "regexp": "dichtienghoa\\.(net|com)/truyen/\\d+",
+        "description": "Đọc truyện tại Dịch Tiếng Hoa (dichtienghoa.net) — nội dung tiếng Trung gốc",
         "icon": "icon.png",
         "locale": "zh_CN",
         "language": "javascript",
@@ -30,6 +30,17 @@
             "title": "Mật khẩu",
             "mode": "input",
             "format": "text"
+        },
+        "auto_buy": {
+            "title": "Tự động mua chương VIP bằng coin",
+            "subtitle": "Chỉ khi đã điền tài khoản và đủ coin",
+            "mode": "select",
+            "values": [
+                "off=Không tự mua",
+                "on=Tự mua bằng coin"
+            ],
+            "default": "off",
+            "format": "single"
         }
     }
 }
