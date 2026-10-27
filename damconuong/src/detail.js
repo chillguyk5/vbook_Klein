@@ -116,7 +116,8 @@ function getDescription(doc, card, title) {
         if (description) return;
         if (node.select("h1").size() > 0 || node.select("h3").size() > 0) return;
         if (node.select("h2").size() !== 1) return;
-        if (cleanText(node.select("h2").first().text()) !== "Nội dung") return;
+        var h2Node = node.select("h2").first();
+        if (!h2Node || cleanText(h2Node.text()) !== "Nội dung") return;
 
         var contentNode = node.select(".prose").first();
         if (!contentNode) return;
@@ -250,7 +251,8 @@ function getSuggestSectionHtml(doc) {
 
     doc.select("main div").forEach(function(node) {
         if (html || node.select("h3").size() === 0) return;
-        if (cleanText(node.select("h3").first().text()).toLowerCase() !== "đề cử") return;
+        var h3Node = node.select("h3").first();
+        if (!h3Node || cleanText(h3Node.text()).toLowerCase() !== "đề cử") return;
 
         html = node.html();
     });
@@ -296,7 +298,8 @@ function execute(url) {
         var translator = getDlValue(doc, "Nhóm dịch") ||
             getFirstText(detailCard, "a[href*='/nhom-dich/']") ||
             getFirstText(doc, "a[href*='/nhom-dich/']");
-        var alias = cleanText(doc.select("p.md-alt").first().text()) || getMetaValue(detailCard, "Tên khác:");
+        var altNode = doc.select("p.md-alt").first();
+        var alias = (altNode ? cleanText(altNode.text()) : "") || getMetaValue(detailCard, "Tên khác:");
         var status = getFirstText(doc, ".md-badges .md-badge") || getMetaValue(detailCard, "Tình trạng:");
         var updatedAt = getLastUpdated(doc) || getMetaValue(detailCard, "Lần cuối:");
         var views = getStatValue(doc, "lượt xem") || getMetaValue(detailCard, "Lượt xem:");

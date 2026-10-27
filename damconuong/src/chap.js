@@ -16,6 +16,8 @@ function splitChapterPath(url) {
     };
 }
 
+var LAST_CHAP_ERROR = "";
+
 function fetchCipherPages(cipherPath) {
     try {
         var sep = cipherPath.indexOf("/");
@@ -31,7 +33,15 @@ function fetchCipherPages(cipherPath) {
                 "Accept": "application/json"
             }
         });
-        if (!response.ok) return null;
+        if (!response.ok) {
+            try {
+                var errJson = response.json();
+                if (errJson && errJson.code === "login_required") {
+                    LAST_CHAP_ERROR = "Chương này yêu cầu đăng nhập trên Damconuong để đọc.";
+                }
+            } catch (e) {}
+            return null;
+        }
 
         var body = response.json();
         if (!body || !body.e) return null;
@@ -40,9 +50,18 @@ function fetchCipherPages(cipherPath) {
         if (!payload || !payload.p || !payload.p.length) return null;
 
         var data = [];
-        payload.p.forEach(function(src) {
+        var keys = payload.s || [];
+        for (var i = 0; i < payload.p.length; i++) {
+            var src = payload.p[i];
             var link = normalizeUrl(String(src));
-            if (link) {
+            if (!link) continue;
+            var key = keys[i] || "";
+            if (key && String(key).indexOf("x1.") === 0) {
+                data.push({
+                    link: link + " " + key,
+                    script: "image.js"
+                });
+            } else {
                 data.push({
                     link: link,
                     headers: {
@@ -51,7 +70,7 @@ function fetchCipherPages(cipherPath) {
                     }
                 });
             }
-        });
+        }
         return data.length ? data : null;
     } catch (error) {
         return null;
@@ -79,6 +98,7 @@ function parseLegacyImages(doc) {
 }
 
 function execute(url) {
+    LAST_CHAP_ERROR = "";
     url = normalizeUrl(url);
 
     var parts = splitChapterPath(url);
@@ -103,7 +123,13 @@ function execute(url) {
 
         var legacy = parseLegacyImages(doc);
         if (legacy.length) return Response.success(legacy);
+
+        var contentText = doc.select("#chapter-content").text() || "";
+        if (contentText.indexOf("Nội dung bị hạn chế") >= 0 || contentText.indexOf("đăng nhập") >= 0) {
+            return Response.error("Nội dung bị hạn chế: Vui lòng đăng nhập trên trang nguồn để xem chương này.");
+        }
     }
 
+    if (LAST_CHAP_ERROR) return Response.error(LAST_CHAP_ERROR);
     return null;
 }

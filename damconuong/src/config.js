@@ -86,7 +86,17 @@ function getDcnUa() {
     return "Mozilla/5.0 (Linux; Android 13; SM-G981B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Mobile Safari/537.36";
 }
 
+function getDcnCookie() {
+    if (typeof localCookie === "undefined") return "";
+    try {
+        return localCookie.getCookie(BASE_URL) || localCookie.getCookie("https://damconuong.win") || localCookie.getCookie() || "";
+    } catch (e) {
+        return "";
+    }
+}
+
 function dcnHeaders(extra) {
+    var cookie = getDcnCookie();
     var h = {
         "User-Agent": getDcnUa(),
         "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
@@ -95,6 +105,9 @@ function dcnHeaders(extra) {
         "Sec-Ch-Ua-Mobile": "?1",
         "Sec-Ch-Ua-Platform": "\"Android\""
     };
+    if (cookie) {
+        h["Cookie"] = cookie;
+    }
     if (extra) {
         for (var k in extra) {
             if (extra.hasOwnProperty(k) && extra[k] != null) h[k] = extra[k];
