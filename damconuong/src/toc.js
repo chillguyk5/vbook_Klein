@@ -7,7 +7,7 @@ function execute(url) {
     if (!matched) return null;
 
     var storySlug = matched[1];
-    var response = fetch(url);
+    var response = dcnFetch(url);
     if (response.ok) {
         var doc = response.html();
         var seen = {};

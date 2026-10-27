@@ -4,7 +4,7 @@ function execute(url, page) {
     if (!page) page = "1";
 
     var requestUrl = buildPagedUrl(url, page);
-    var response = fetch(requestUrl);
+    var response = dcnFetch(requestUrl);
     if (response.ok) {
         var doc = response.html();
         var data = parseMangaCards(doc);

@@ -284,7 +284,7 @@ function getLastUpdated(doc) {
 function execute(url) {
     url = normalizeUrl(url);
 
-    var response = fetch(url);
+    var response = dcnFetch(url);
     if (response.ok) {
         var doc = response.html();
         var detailCard = getDetailCard(doc);

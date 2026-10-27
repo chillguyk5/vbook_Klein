@@ -80,9 +80,39 @@ function setCachedBaseUrl(base) {
     }
 }
 
+function getDcnUa() {
+    try { return UserAgent.android() + ""; } catch (e2) {}
+    try { return UserAgent.chrome() + ""; } catch (e3) {}
+    return "Mozilla/5.0 (Linux; Android 13; SM-G981B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Mobile Safari/537.36";
+}
+
+function dcnHeaders(extra) {
+    var h = {
+        "User-Agent": getDcnUa(),
+        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
+        "Accept-Language": "vi-VN,vi;q=0.9,en-US;q=0.8,en;q=0.7",
+        "Sec-Ch-Ua": "\"Chromium\";v=\"116\", \"Not)A;Brand\";v=\"24\", \"Google Chrome\";v=\"116\"",
+        "Sec-Ch-Ua-Mobile": "?1",
+        "Sec-Ch-Ua-Platform": "\"Android\""
+    };
+    if (extra) {
+        for (var k in extra) {
+            if (extra.hasOwnProperty(k) && extra[k] != null) h[k] = extra[k];
+        }
+    }
+    return h;
+}
+
+function dcnFetch(url, opts) {
+    opts = opts || {};
+    var headers = dcnHeaders(opts.headers || {});
+    opts.headers = headers;
+    return fetch(url, opts);
+}
+
 function canUseBaseUrl(base, path) {
     try {
-        var response = fetch(base + path);
+        var response = dcnFetch(base + path);
         return !!(response && response.ok);
     } catch (error) {
         return false;

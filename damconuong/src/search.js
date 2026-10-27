@@ -6,7 +6,7 @@ function execute(key, page) {
     if (page !== "1") return Response.success([]);
 
     var requestUrl = BASE_URL + "/live-search?q=" + encodeURIComponent(key);
-    var response = fetch(requestUrl);
+    var response = dcnFetch(requestUrl);
     if (response.ok) {
         var res = response.json();
         var data = [];

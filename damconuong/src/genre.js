@@ -1,7 +1,7 @@
 load('config.js');
 
 function execute() {
-    var response = fetch(BASE_URL + "/tim-kiem");
+    var response = dcnFetch(BASE_URL + "/tim-kiem");
     if (response.ok) {
         var doc = response.html();
         var seen = {};

@@ -25,7 +25,7 @@ function fetchCipherPages(cipherPath) {
         var requestUrl = BASE_URL + "/_c/mangas/" + encodeURIComponent(cipherPath.substring(0, sep)) +
             "/chapters/" + encodeURIComponent(cipherPath.substring(sep + 1)) +
             "/pages?_=" + token;
-        var response = fetch(requestUrl, {
+        var response = dcnFetch(requestUrl, {
             headers: {
                 "X-Requested-With": "XMLHttpRequest",
                 "Accept": "application/json"
@@ -76,7 +76,7 @@ function execute(url) {
     }
 
     // Fallback: đọc HTML chương (path cipher khác URL hoặc cơ chế cũ img.chapter-img)
-    var response = fetch(url);
+    var response = dcnFetch(url);
     if (response.ok) {
         var doc = response.html();
 
