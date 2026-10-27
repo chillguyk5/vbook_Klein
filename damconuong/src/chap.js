@@ -42,7 +42,15 @@ function fetchCipherPages(cipherPath) {
         var data = [];
         payload.p.forEach(function(src) {
             var link = normalizeUrl(String(src));
-            if (link) data.push({ link: link });
+            if (link) {
+                data.push({
+                    link: link,
+                    headers: {
+                        "Referer": BASE_URL + "/",
+                        "User-Agent": getDcnUa()
+                    }
+                });
+            }
         });
         return data.length ? data : null;
     } catch (error) {
@@ -59,7 +67,11 @@ function parseLegacyImages(doc) {
         }
         if (img) {
             data.push({
-                link: img
+                link: img,
+                headers: {
+                    "Referer": BASE_URL + "/",
+                    "User-Agent": getDcnUa()
+                }
             });
         }
     });
