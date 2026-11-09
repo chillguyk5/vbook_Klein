@@ -1,289 +1,292 @@
 var BASE_URL = "https://dichtienghoa.net";
-// .site đã bị domain parking nhưng giữ lại cuối mảng fallback cho backward-compat
 var DOMAINS = ["https://dichtienghoa.net", "https://dichtienghoa.site", "https://dichtienghoa.com"];
 
-function configText(name) {
-    try {
-        var raw = this[name];
-        raw = raw === undefined || raw === null ? "" : String(raw);
-        return raw.trim();
-    } catch (e) {
-        return "";
+function getUa() {
+    if (typeof UserAgent !== "undefined") {
+        if (typeof UserAgent.android === "function") return UserAgent.android() + "";
+        if (typeof UserAgent.chrome === "function") return UserAgent.chrome() + "";
     }
+    return "Mozilla/5.0 (Linux; Android 16; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.8078.47 Mobile Safari/537.36";
+}
+
+function configText(name) {
+    var raw = this[name];
+    if (raw === undefined || raw === null) return "";
+    return String(raw).trim();
+}
+
+function getBuyMode() {
+    var v = this["auto_buy"];
+    if (v === true || v === 1) return "on";
+    if (v === false || v === 0) return "off";
+    if (v === undefined || v === null) return "confirm";
+    v = String(v).toLowerCase().trim();
+    if (v === "off" || v === "false" || v === "0") return "off";
+    if (v === "on" || v === "true" || v === "1" || v === "yes" || v.indexOf("on") === 0) return "on";
+    return "confirm";
 }
 
 function autoBuyOn() {
-    var v;
-    try { v = this["auto_buy"]; } catch (e) { return false; }
-    if (v === true || v === 1) return true;
-    v = v === undefined || v === null ? "" : String(v).toLowerCase().trim();
-    return v === "true" || v === "1" || v === "on" || v === "yes";
+    return getBuyMode() === "on";
 }
 
 function hasCredentials() {
     return !!configText("username") && !!configText("password");
 }
 
-function getUa() {
-    try { return UserAgent.android() + ""; } catch (e2) {}
-    try { return UserAgent.chrome() + ""; } catch (e3) {}
-    return "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36";
+// ============ COOKIE & STORAGE ============
+var _cookieCache = null;
+
+function saveCookie(cookie) {
+    if (!cookie) return;
+    _cookieCache = cookie;
+    if (typeof localStorage !== "undefined") localStorage.setItem("dth_cookie", cookie);
+    if (typeof localCookie !== "undefined") localCookie.setCookie(cookie);
 }
 
-function defaultHeaders(extra) {
-    var h = {
-        "accept": "application/json, text/plain, */*",
-        "origin": BASE_URL,
-        "referer": BASE_URL + "/",
-        "user-agent": getUa()
-    };
-    if (extra) {
-        for (var k in extra) {
-            if (extra.hasOwnProperty(k) && extra[k] != null) h[k] = extra[k];
-        }
+function getCookie() {
+    if (_cookieCache) return _cookieCache;
+    var c1 = typeof localStorage !== "undefined" ? (localStorage.getItem("dth_cookie") || "") : "";
+    var c2 = typeof localCookie !== "undefined" ? (localCookie.getCookie(BASE_URL) || "") : "";
+    if (!c1) return (_cookieCache = c2);
+    if (!c2) return (_cookieCache = c1);
+    var parts = (c1 + "; " + c2).split(";"), map = {}, i, eq, k;
+    for (i = 0; i < parts.length; i++) {
+        var p = parts[i].trim();
+        eq = p.indexOf("=");
+        if (eq > 0) map[p.slice(0, eq).trim()] = p.slice(eq + 1).trim();
     }
-    return h;
+    var out = [];
+    for (k in map) out.push(k + "=" + map[k]);
+    _cookieCache = out.join("; ");
+    return _cookieCache;
 }
 
-function parseJson(res) {
-    if (!res) return null;
-    try {
-        if (typeof res.json === "function") {
-            var j = res.json();
-            if (j) return j;
-        }
-    } catch (e) {}
-    try {
-        var t = res.text();
-        if (t) return JSON.parse(t);
-    } catch (e2) {}
-    return null;
-}
-
-function getCsrfTokenFromCookie(cookie) {
-    var match = (((cookie || "") + "").match(/_csrfToken=([^;,\s<]+)/) || []);
-    return match[1] || "";
-}
-
-function getCookieValue(cookie, name) {
-    var m = String(cookie || "").match(new RegExp("(?:^|;\\s*)" + name + "=([^;]*)"));
+function getCookieVal(cookie, name) {
+    var m = (cookie || "").match(new RegExp("(?:^|;\\s*)" + name + "=([^;]*)"));
     return m ? m[1].trim() : "";
 }
 
 function dropCookie(cookie, name) {
-    var parts = String(cookie || "").split(";");
-    var out = [];
-    for (var i = 0; i < parts.length; i++) {
-        var p = parts[i].trim();
-        if (!p || p.indexOf(name + "=") === 0) continue;
-        out.push(p);
+    var parts = (cookie || "").split(";"), out = [], i, p;
+    for (i = 0; i < parts.length; i++) {
+        p = parts[i].trim();
+        if (p && p.indexOf(name + "=") !== 0) out.push(p);
     }
     return out.join("; ");
 }
 
-function mergeCookie(oldCookie, setCookie) {
-    var map = {};
-    function put(part) {
-        part = (part || "").trim();
-        if (!part) return;
-        var eq = part.indexOf("=");
-        if (eq < 1) return;
-        var k = part.slice(0, eq).trim();
-        var v = part.slice(eq + 1).trim();
-        var low = k.toLowerCase();
-        if (low === "path" || low === "domain" || low === "expires" || low === "max-age" || low === "secure" || low === "httponly" || low === "samesite") return;
-        map[k] = v;
-    }
-    var oldParts = (oldCookie || "").split(";");
-    for (var i = 0; i < oldParts.length; i++) put(oldParts[i]);
-    var chunks = String(setCookie || "").split(/,(?=[^;]+?=)/);
-    for (var j = 0; j < chunks.length; j++) {
-        var first = chunks[j].split(";")[0];
-        put(first);
+function mergeCookie(oldC, newC) {
+    if (!oldC) return newC || "";
+    if (!newC) return oldC;
+    var map = {}, i, p, eq, k;
+    var raw = (oldC + "; " + newC).split(";");
+    for (i = 0; i < raw.length; i++) {
+        p = raw[i].trim();
+        eq = p.indexOf("=");
+        if (eq > 0) {
+            k = p.slice(0, eq).trim();
+            var l = k.toLowerCase();
+            if (l !== "path" && l !== "domain" && l !== "expires" && l !== "max-age" && l !== "secure" && l !== "httponly" && l !== "samesite") {
+                map[k] = p.slice(eq + 1).trim();
+            }
+        }
     }
     var out = [];
-    for (var key in map) {
-        if (map.hasOwnProperty(key)) out.push(key + "=" + map[key]);
-    }
+    for (k in map) out.push(k + "=" + map[k]);
     return out.join("; ");
 }
 
-function persistCookie(cookie) {
-    if (!cookie || typeof localCookie === "undefined") return;
-    try { localCookie.setCookie(cookie); } catch (e) {}
+// Backward-compat aliases used by tests or external callers
+function readCookie() { return getCookie(); }
+function persistCookie(c) { saveCookie(c); }
+function getCookieValue(c, n) { return getCookieVal(c, n); }
+
+// ============ USER & WALLET CACHE ============
+function getCachedUser() {
+    if (typeof localStorage === "undefined") return null;
+    var raw = localStorage.getItem("dth_user");
+    if (!raw) return null;
+    try { return JSON.parse(raw); } catch (e) { return null; }
 }
 
-function readCookie() {
-    if (typeof localCookie === "undefined") return "";
-    try { return localCookie.getCookie(BASE_URL) || localCookie.getCookie() || ""; } catch (e) { return ""; }
+function saveCachedUser(username, user) {
+    if (typeof localStorage !== "undefined") {
+        localStorage.setItem("dth_user", JSON.stringify({ username: username, user: user, time: Date.now() }));
+    }
+}
+
+function clearCachedUser() {
+    if (typeof localStorage !== "undefined") {
+        localStorage.removeItem("dth_user");
+        localStorage.removeItem("dth_wallet");
+    }
+}
+
+function clearCachedWallet() {
+    if (typeof localStorage !== "undefined") localStorage.removeItem("dth_wallet");
+}
+
+function getUserWallet(force) {
+    if (typeof localStorage !== "undefined" && !force) {
+        var raw = localStorage.getItem("dth_wallet");
+        if (raw) {
+            try {
+                var c = JSON.parse(raw);
+                if (Date.now() - c.time < 300000) return c.wallet;
+            } catch (e) {}
+        }
+    }
+    var res = apiFetch("/api/models/user/wallet");
+    var json = parseJson(res);
+    var wallet = (json && json.data) ? json.data : json;
+    if (wallet && wallet.balance !== undefined) {
+        if (typeof localStorage !== "undefined") {
+            localStorage.setItem("dth_wallet", JSON.stringify({ wallet: wallet, time: Date.now() }));
+        }
+        return wallet;
+    }
+    return null;
+}
+
+function isUserAuthenticated() {
+    if (hasCredentials()) return true;
+    var cached = getCachedUser();
+    if (cached && cached.username) return true;
+    var cookie = getCookie();
+    var tok = getCookieVal(cookie, "access_token") || getCookieVal(cookie, "dth_bearer") || getCookieVal(cookie, "token");
+    if (tok) return true;
+    return !!(cookie && (cookie.indexOf("session") >= 0 || cookie.indexOf("auth") >= 0));
+}
+
+function syncAuthFromCookie(force) {
+    if (!force) {
+        var cached = getCachedUser();
+        if (cached && cached.username && cached.time && (Date.now() - cached.time < 300000)) return cached;
+    }
+    var cookie = getCookie();
+    var tok = getCookieVal(cookie, "access_token") || getCookieVal(cookie, "dth_bearer") || getCookieVal(cookie, "token");
+    if (!tok && cookie.indexOf("session") < 0 && cookie.indexOf("auth") < 0) return null;
+
+    var res = apiFetch("/api/auth/me");
+    if (!res || !res.ok) {
+        if (res && (res.status === 401 || res.status === 403)) clearCachedUser();
+        return null;
+    }
+
+    var json = parseJson(res);
+    var u = (json && json.data) ? json.data : (json && (json.user || json));
+    if (!u) return null;
+    var uname = u.username || u.name || u.email || u.identifier || "";
+    if (uname) {
+        saveCachedUser(uname, u);
+        return { username: uname, user: u, time: Date.now() };
+    }
+    return null;
+}
+
+// ============ HTTP & CLOUDFLARE ============
+function parseJson(res) {
+    if (!res) return null;
+    if (typeof res.json === "function") {
+        try { return res.json(); } catch (e) {}
+    }
+    if (typeof res.text === "function") {
+        try { return JSON.parse(res.text()); } catch (e2) {}
+    }
+    return null;
 }
 
 function isCfChallengeText(text) {
-    if (!text) return false;
-    var s = ("" + text).toLowerCase();
-    if (s.length > 80000) return false; // trang thật luôn lớn hơn 80KB
-    var hasPhrase = s.indexOf("just a moment") >= 0 || s.indexOf("checking your browser") >= 0
-        || s.indexOf("verify you are human") >= 0 || s.indexOf("attention required") >= 0
-        || s.indexOf("cloudflare") >= 0 && s.indexOf("turnstile") >= 0;
-    if (!hasPhrase) return false;
-    return s.indexOf("challenge-platform") >= 0 || s.indexOf("challenges.cloudflare") >= 0
-        || s.indexOf("_cf_chl") >= 0 || s.indexOf("cf-mitigated") >= 0;
+    if (!text || text.length > 80000) return false;
+    var s = text.toLowerCase();
+    return (s.indexOf("just a moment") >= 0 || s.indexOf("verify you are human") >= 0 || s.indexOf("turnstile") >= 0) &&
+           (s.indexOf("challenge-platform") >= 0 || s.indexOf("_cf_chl") >= 0 || s.indexOf("cf-mitigated") >= 0);
 }
 
 function isCfBlocked(res) {
-    if (!res) return false;
-    if (res.status === 403 || res.status === 503) {
-        try {
-            var headers = res.headers || {};
-            var mitigated = headers["cf-mitigated"] || headers["Cf-Mitigated"] || "";
-            if (mitigated === "challenge") return true;
-        } catch (e) {}
-        try {
-            var t = res.text();
-            if (isCfChallengeText(t)) return true;
-        } catch (e2) {}
-    }
-    return false;
+    if (!res || (res.status !== 403 && res.status !== 503)) return false;
+    var h = res.headers;
+    if (h && (h["cf-mitigated"] === "challenge" || h["Cf-Mitigated"] === "challenge")) return true;
+    var t = typeof res.text === "function" ? res.text() : "";
+    return isCfChallengeText(t);
 }
 
-// ====== BROWSER SESSION ĐỂ VƯỢT CLOUDFLARE ======
-var DTH_SESSION = null; // { b, passed, at, loaded }
-var DTH_SESSION_TTL = 10 * 60 * 1000;
-
+// Off-screen browser session for Cloudflare challenges
+var DTH_SESSION = null;
 function hasEngineBrowser() {
     return typeof Engine !== "undefined" && typeof Engine.newBrowser === "function";
-}
-
-function closeBrowser() {
-    if (DTH_SESSION) {
-        try { DTH_SESSION.b.close(); } catch (e) {}
-        DTH_SESSION = null;
-    }
 }
 
 function getBrowser() {
     if (!hasEngineBrowser()) return null;
     if (DTH_SESSION) {
-        var dead = Date.now() - DTH_SESSION.at > DTH_SESSION_TTL;
+        var dead = Date.now() - DTH_SESSION.at > 600000;
         if (!dead && DTH_SESSION.loaded) {
             var r = null;
-            try { r = DTH_SESSION.b.callJs("1", 3000); } catch (e) { r = null; }
+            try { r = DTH_SESSION.b.callJs("1", 3000); } catch (e) {}
             if (r === undefined || r === null) dead = true;
             else { DTH_SESSION.at = Date.now(); return DTH_SESSION.b; }
         }
-        if (dead) closeBrowser();
-        else return DTH_SESSION.b;
+        if (dead) {
+            try { DTH_SESSION.b.close(); } catch (e2) {}
+            DTH_SESSION = null;
+        } else return DTH_SESSION.b;
     }
     var b = Engine.newBrowser();
-    try { b.setUserAgent(getUa()); } catch (e) {}
+    try { b.setUserAgent(_UA); } catch (e3) {}
     DTH_SESSION = { b: b, passed: false, at: Date.now(), loaded: false };
     return DTH_SESSION.b;
 }
 
-function callStr(b, js, ms) {
-    try {
-        var r = b.callJs(js, ms || 3000);
-        if (r === undefined || r === null) return null;
-        return ("" + r).replace(/<[^>]*>/g, "").trim();
-    } catch (e) { return null; }
-}
-
-function callRaw(b, js, ms) {
-    try {
-        var r = b.callJs(js, ms || 3000);
-        if (r === undefined || r === null) return null;
-        return "" + r;
-    } catch (e) { return null; }
-}
-
-function harvestBrowserCookie() {
-    if (typeof localCookie === "undefined") return;
-    try {
-        var j = localCookie.getCookie(BASE_URL) || localCookie.getCookie() || "";
-        if (j) persistCookie(j);
-    } catch (e) {}
-}
-
-function waitForPass(b, budgetMs) {
-    var t0 = Date.now();
-    var budget = budgetMs || 10000;
-    while (Date.now() - t0 < budget) {
-        var d = null;
-        try { d = b.html(1500); } catch (e) {}
-        var text = d ? ("" + d.html()) : "";
-        if (text && !isCfChallengeText(text) && text.length > 500) {
-            if (DTH_SESSION) { DTH_SESSION.passed = true; DTH_SESSION.at = Date.now(); }
-            harvestBrowserCookie();
-            return true;
-        }
-        sleep(600);
-    }
-    return false;
-}
-
-function warmBrowserCf() {
-    var b = getBrowser();
-    if (!b) return false;
-    try {
-        b.launch(BASE_URL + "/", 15000);
-        if (DTH_SESSION) { DTH_SESSION.loaded = true; DTH_SESSION.at = Date.now(); }
-        return waitForPass(b, 10000);
-    } catch (e) {
-        closeBrowser();
-        return false;
-    }
-}
-
-// Thực thi fetch trong context WebView đã vượt Cloudflare
-var BFETCH_SEQ = 0;
 function browserFetchJson(url, opts) {
     opts = opts || {};
     var b = getBrowser();
     if (!b) return null;
 
     if (!DTH_SESSION || !DTH_SESSION.passed) {
-        if (!warmBrowserCf()) return null;
+        try {
+            b.launch(BASE_URL + "/", 15000);
+            if (DTH_SESSION) { DTH_SESSION.loaded = true; DTH_SESSION.at = Date.now(); }
+            var t0 = Date.now();
+            while (Date.now() - t0 < 2500) {
+                var d = b.html(1200);
+                var text = d ? (d.html() + "") : "";
+                if (text && !isCfChallengeText(text) && text.length > 500) {
+                    if (DTH_SESSION) { DTH_SESSION.passed = true; DTH_SESSION.at = Date.now(); }
+                    var j = typeof localCookie !== "undefined" ? (localCookie.getCookie(BASE_URL) || "") : "";
+                    if (j) saveCookie(j);
+                    break;
+                }
+                sleep(400);
+            }
+        } catch (e) {
+            if (DTH_SESSION) { try { DTH_SESSION.b.close(); } catch (ce) {} DTH_SESSION = null; }
+            return null;
+        }
     }
 
-    var id = "dth" + (++BFETCH_SEQ);
     var full = url.indexOf("http") === 0 ? url : (BASE_URL + url);
-    var method = opts.method || "GET";
-    var body = opts.body ? String(opts.body) : null;
-    var headers = opts.headers || {};
-    headers["Accept"] = headers["Accept"] || "application/json, text/plain, */*";
-    headers["X-Requested-With"] = "XMLHttpRequest";
-
+    var id = "dth" + Date.now();
+    var cleanH = { "Accept": "application/json, text/plain, */*", "X-Requested-With": "XMLHttpRequest" };
     var js = "(function(){var i='" + id + "';window[i+'s']=0;window[i+'r']='';"
-        + "var o={method:" + JSON.stringify(method) + ",credentials:'same-origin',cache:'no-store',headers:" + JSON.stringify(headers) + "};"
-        + (body ? "o.body=" + JSON.stringify(body) + ";" : "")
-        + "fetch(" + JSON.stringify(full) + ",o).then(function(r){"
-        + "window[i+'c']=r.status;"
-        + "r.text().then(function(t){window[i+'r']=t;window[i+'s']=1;});"
-        + "},function(e){window[i+'s']=2;});})()";
+        + "fetch(" + JSON.stringify(full) + ",{method:" + JSON.stringify(opts.method || "GET") + ",credentials:'include',cache:'no-store',headers:" + JSON.stringify(cleanH) + (opts.body ? ",body:" + JSON.stringify(String(opts.body)) : "") + "}).then(function(r){"
+        + "window[i+'c']=r.status;r.text().then(function(t){window[i+'r']=t;window[i+'s']=1;});"
+        + "},function(){window[i+'s']=2;});})()";
 
     try { b.callJs(js, 6000); } catch (e2) { return null; }
 
     var st = 0;
     for (var i = 0; i < 30; i++) {
         sleep(300);
-        var n = parseInt(callStr(b, "window['" + id + "s']", 2000) || "", 10);
+        var n = parseInt(String(b.callJs("window['" + id + "s']", 2000) || ""), 10);
         if (!isNaN(n)) { st = n; if (st === 1 || st === 2) break; }
     }
     if (st !== 1) return null;
 
-    var status = parseInt(callStr(b, "window['" + id + "c']", 2000) || "", 10);
-    var len = parseInt(callStr(b, "(window['" + id + "r']||'').length", 2000) || "0", 10) || 0;
-    var out = "";
-    var CHUNK = 40000;
-    for (var q = 0; q < len; q += CHUNK) {
-        var part = callRaw(b, "(window['" + id + "r']||'').substring(" + q + "," + (q + CHUNK) + ")", 5000);
-        if (part === null) { out = ""; break; }
-        var wm = /<body>([\s\S]*)<\/body>/.exec(part);
-        out += wm ? wm[1] : part;
-    }
-    try { b.callJs("try{delete window['" + id + "r'];delete window['" + id + "s'];delete window['" + id + "c'];}catch(e){}", 1500); } catch (e3) {}
-
-    harvestBrowserCookie();
+    var status = parseInt(String(b.callJs("window['" + id + "c']", 2000) || ""), 10);
+    var out = String(b.callJs("window['" + id + "r']||''", 5000) || "").replace(/<[^>]*>/g, "");
+    try { b.callJs("delete window['" + id + "r'];delete window['" + id + "s'];delete window['" + id + "c'];", 1000); } catch (e3) {}
 
     return {
         ok: status >= 200 && status < 300,
@@ -294,193 +297,212 @@ function browserFetchJson(url, opts) {
     };
 }
 
-function getValidTokenAndCookie() {
-    var cookie = readCookie();
-    var csrfToken = getCsrfTokenFromCookie(cookie);
-    var base = getCookieValue(cookie, "dth_base") || BASE_URL;
-    var bearer = getCookieValue(cookie, "dth_bearer");
-    if (csrfToken) {
+// ============ API FETCH (UNIFIED ENGINE) ============
+function getTokenCtx() {
+    var cookie = getCookie();
+    var m = (cookie || "").match(/_csrfToken=([^;,\s<]+)/);
+    var csrf = m ? m[1] : "";
+    var base = getCookieVal(cookie, "dth_base") || BASE_URL;
+    var bearer = getCookieVal(cookie, "dth_bearer") || getCookieVal(cookie, "access_token") || getCookieVal(cookie, "token");
+    if (csrf) {
         BASE_URL = base;
-        return { token: csrfToken, cookie: cookie, base: base, bearer: bearer };
+        return { token: csrf, cookie: cookie, base: base, bearer: bearer };
     }
+
     var order = [base];
     for (var d = 0; d < DOMAINS.length; d++) {
         if (order.indexOf(DOMAINS[d]) < 0) order.push(DOMAINS[d]);
     }
     for (var i = 0; i < order.length; i++) {
         var dom = order[i];
-        var res = fetch(dom + "/", { headers: defaultHeaders({ origin: dom, referer: dom + "/" }) });
+        var res = fetch(dom + "/", { headers: { "user-agent": getUa(), "origin": dom, "referer": dom + "/" } });
         if (!res || !res.ok) continue;
-        var setCookie = res.headers["set-cookie"] || res.headers["Set-Cookie"] || "";
-        var tok = getCsrfTokenFromCookie(setCookie);
-        if (!tok) continue;
-        BASE_URL = dom;
-        cookie = mergeCookie(mergeCookie(cookie, setCookie), "_csrfToken=" + tok);
-        cookie = mergeCookie(cookie, "dth_base=" + dom);
-        persistCookie(cookie);
-        return { token: tok, cookie: cookie, base: dom, bearer: bearer };
+        var sc = (res.headers && (res.headers["set-cookie"] || res.headers["Set-Cookie"])) || "";
+        var tm = sc.match(/_csrfToken=([^;,\s<]+)/);
+        if (tm) {
+            BASE_URL = dom;
+            cookie = mergeCookie(mergeCookie(cookie, sc), "_csrfToken=" + tm[1] + "; dth_base=" + dom);
+            saveCookie(cookie);
+            return { token: tm[1], cookie: cookie, base: dom, bearer: bearer };
+        }
     }
-    // all probes failed: fallback token
-    csrfToken = "1wfcRpG3D0X2hWDnAYieWQrgwa6HJMglAgXq8chTHms";
-    cookie = mergeCookie(cookie, "_csrfToken=" + csrfToken);
-    persistCookie(cookie);
-    return { token: csrfToken, cookie: cookie, base: base, bearer: bearer };
+    csrf = "1wfcRpG3D0X2hWDnAYieWQrgwa6HJMglAgXq8chTHms";
+    cookie = mergeCookie(cookie, "_csrfToken=" + csrf);
+    saveCookie(cookie);
+    return { token: csrf, cookie: cookie, base: base, bearer: bearer };
 }
 
-function buildApiUrl(path, base, token) {
-    var url = path.indexOf("http") === 0 ? path : (base + path);
-    if (url.indexOf("_csrfToken=") < 0) {
-        url = url + (url.indexOf("?") >= 0 ? "&" : "?") + "_csrfToken=" + encodeURIComponent(token);
+function buildHeaders(extra, tc) {
+    var h = {
+        "accept": "application/json, text/plain, */*",
+        "origin": tc ? tc.base : BASE_URL,
+        "referer": (tc ? tc.base : BASE_URL) + "/",
+        "user-agent": getUa(),
+        "x-csrf-token": tc ? tc.token : "",
+        "Cookie": tc ? tc.cookie : ""
+    };
+    if (tc && tc.bearer) h["Authorization"] = "Bearer " + tc.bearer;
+    if (extra) {
+        for (var k in extra) {
+            if (extra.hasOwnProperty(k) && extra[k] != null) h[k] = extra[k];
+        }
     }
-    return url;
-}
-
-function doApiFetch(url, opts, tc) {
-    var headers = defaultHeaders(opts.headers || {});
-    if (url.indexOf(tc.base) === 0) {
-        headers["Cookie"] = tc.cookie;
-        if (tc.bearer) headers["Authorization"] = "Bearer " + tc.bearer;
-    }
-    if (opts.referer) headers["referer"] = opts.referer;
-    var res = fetch(url, {
-        method: opts.method || "GET",
-        headers: headers,
-        body: opts.body
-    });
-    if (res) {
-        var setCookie = res.headers["set-cookie"] || res.headers["Set-Cookie"] || "";
-        if (setCookie) persistCookie(mergeCookie(tc.cookie, setCookie));
-    }
-    return res;
+    return h;
 }
 
 function apiFetch(path, opts) {
     opts = opts || {};
-    var tc = getValidTokenAndCookie();
-    var fullUrl = buildApiUrl(path, tc.base, tc.token);
-    var res = doApiFetch(fullUrl, opts, tc);
+    var tc = getTokenCtx();
+    var full = path.indexOf("http") === 0 ? path : (tc.base + path);
+    if (full.indexOf("_csrfToken=") < 0) {
+        full += (full.indexOf("?") >= 0 ? "&" : "?") + "_csrfToken=" + encodeURIComponent(tc.token);
+    }
+    var headers = buildHeaders(opts.headers, tc);
+    if (opts.referer) headers["referer"] = opts.referer;
+    if (opts.method === "POST" && !headers["Content-Type"]) headers["Content-Type"] = "application/json";
 
-    // Nếu gặp Cloudflare challenge (403/503) và đang chạy trong vBook có Engine.newBrowser:
-    // thử warm qua browser để lấy cf_clearance và fetch lại qua browserFetchJson.
+    var res = fetch(full, { method: opts.method || "GET", headers: headers, body: opts.body });
+    if (res && res.headers) {
+        var sc = res.headers["set-cookie"] || res.headers["Set-Cookie"];
+        if (sc) saveCookie(mergeCookie(tc.cookie, sc));
+    }
+
     if (isCfBlocked(res)) {
         if (hasEngineBrowser()) {
-            var bRes = browserFetchJson(fullUrl, opts);
+            var bRes = browserFetchJson(full, opts);
             if (bRes && bRes.ok) return bRes;
         }
-        // Thử lại fetch thường 1 lần phòng khi WebView đã cập nhật cookie jar dùng chung
-        tc = getValidTokenAndCookie();
-        res = doApiFetch(buildApiUrl(path, tc.base, tc.token), opts, tc);
+        return res;
     }
 
     if (res && res.status === 401 && hasCredentials()) {
         loginIfNeeded(true);
-        tc = getValidTokenAndCookie();
-        res = doApiFetch(buildApiUrl(path, tc.base, tc.token), opts, tc);
+        tc = getTokenCtx();
+        res = fetch(full, { method: opts.method || "GET", headers: buildHeaders(opts.headers, tc), body: opts.body });
     }
 
     if (res && res.status === 403 && !isCfBlocked(res)) {
-        persistCookie(dropCookie(readCookie(), "_csrfToken"));
-        tc = getValidTokenAndCookie();
-        res = doApiFetch(buildApiUrl(path, tc.base, tc.token), opts, tc);
+        saveCookie(dropCookie(getCookie(), "_csrfToken"));
+        _cookieCache = null;
+        tc = getTokenCtx();
+        res = fetch(full, { method: opts.method || "GET", headers: buildHeaders(opts.headers, tc), body: opts.body });
     }
+
     return res;
 }
 
+// ============ AUTH ACTIONS ============
 function loginIfNeeded(force) {
     var username = configText("username");
     var password = configText("password");
-    if (!username || !password) return;
+    if (!username || !password) {
+        var cookieUser = syncAuthFromCookie(force);
+        if (cookieUser) return { ok: true, user: cookieUser.user, fromCookie: true };
+        var tok = getCookieVal(getCookie(), "access_token") || getCookieVal(getCookie(), "dth_bearer");
+        if (tok) return { ok: true, user: null, fromCookie: true };
+        return { ok: false, message: "Chưa đăng nhập (vào cài đặt hoặc đăng nhập trên web)" };
+    }
 
     if (!force) {
-        if (getCookieValue(readCookie(), "access_token")) return;
+        var existingTok = getCookieVal(getCookie(), "access_token");
+        var cached = getCachedUser();
+        if (existingTok && (!cached || cached.username === username)) return { ok: true, user: cached ? cached.user : null };
     } else {
-        persistCookie(dropCookie(dropCookie(readCookie(), "access_token"), "dth_bearer"));
+        saveCookie(dropCookie(dropCookie(getCookie(), "access_token"), "dth_bearer"));
+        _cookieCache = null;
+        clearCachedUser();
     }
 
-    var tc = getValidTokenAndCookie();
-    var headers = defaultHeaders({
+    var tc = getTokenCtx();
+    var fullUrl = tc.base + "/api/auth/login?_csrfToken=" + encodeURIComponent(tc.token);
+    var bodyStr = JSON.stringify({ identifier: username, password: password });
+    var headers = buildHeaders({
         "Content-Type": "application/json",
-        "Cookie": tc.cookie
-    });
-    if (tc.bearer) headers["Authorization"] = "Bearer " + tc.bearer;
-    var loginRes = fetch(tc.base + "/api/auth/login?_csrfToken=" + encodeURIComponent(tc.token), {
-        method: "POST",
-        headers: headers,
-        body: JSON.stringify({
-            identifier: username,
-            password: password
-        })
-    });
-    if (!loginRes || !loginRes.ok) return;
+        "referer": tc.base + "/dang-nhap"
+    }, tc);
 
-    var setCookie = loginRes.headers["set-cookie"] || loginRes.headers["Set-Cookie"] || "";
-    var merged = mergeCookie(tc.cookie, setCookie);
-    var loginJson = parseJson(loginRes);
-    var bearer = (loginJson && loginJson.data && loginJson.data.accessToken) ||
-        (loginJson && loginJson.accessToken) || "";
-    if (bearer) {
-        merged = mergeCookie(merged, "access_token=" + bearer);
-        merged = mergeCookie(merged, "dth_bearer=" + bearer);
+    var loginRes = fetch(fullUrl, { method: "POST", headers: headers, body: bodyStr });
+    if (isCfBlocked(loginRes) && hasEngineBrowser()) {
+        loginRes = browserFetchJson(fullUrl, { method: "POST", headers: headers, body: bodyStr });
     }
-    persistCookie(merged);
+
+    if (!loginRes || !loginRes.ok) {
+        var errJ = parseJson(loginRes) || {};
+        var errMsg = (errJ.data && errJ.data.message) || errJ.message || ("Đăng nhập thất bại (" + (loginRes ? loginRes.status : "không phản hồi") + ")");
+        clearCachedUser();
+        return { ok: false, message: String(errMsg).slice(0, 140) };
+    }
+
+    var setC = (loginRes.headers && (loginRes.headers["set-cookie"] || loginRes.headers["Set-Cookie"])) || "";
+    var merged = mergeCookie(tc.cookie, setC);
+    var loginJson = parseJson(loginRes) || {};
+    var bearer = (loginJson.data && loginJson.data.accessToken) || loginJson.accessToken || "";
+    if (bearer) {
+        merged = mergeCookie(merged, "access_token=" + bearer + "; dth_bearer=" + bearer);
+    }
+    saveCookie(merged);
+
+    var user = loginJson.user || (loginJson.data && loginJson.data.user) || { username: username };
+    saveCachedUser(username, user);
+    clearCachedWallet();
+    return { ok: true, user: user };
 }
 
-// POST /api/models/user/chapter-purchases {chapterId} -> {wallet, purchase}
 function buyChapter(chapterId, refererUrl) {
-    var tc = getValidTokenAndCookie();
-    var headers = defaultHeaders({
-        "Content-Type": "application/json",
-        "Cookie": tc.cookie,
-        "referer": refererUrl
-    });
-    if (tc.bearer) headers["Authorization"] = "Bearer " + tc.bearer;
-    var res = fetch(tc.base + "/api/models/user/chapter-purchases?_csrfToken=" + encodeURIComponent(tc.token), {
+    var logRes = loginIfNeeded();
+    if (!logRes.ok && !isUserAuthenticated()) {
+        return { ok: false, message: logRes.message || "Chưa đăng nhập" };
+    }
+    var tc = getTokenCtx();
+    var headers = { "Content-Type": "application/json", "referer": refererUrl || (tc.base + "/") };
+    var res = apiFetch("/api/models/user/chapter-purchases", {
         method: "POST",
         headers: headers,
         body: JSON.stringify({ chapterId: String(chapterId) })
     });
     if (!res) return { ok: false, message: "không có phản hồi từ server" };
-    if (res.ok) return { ok: true };
+    if (res.status === 401 && hasCredentials()) {
+        loginIfNeeded(true);
+        res = apiFetch("/api/models/user/chapter-purchases", {
+            method: "POST",
+            headers: headers,
+            body: JSON.stringify({ chapterId: String(chapterId) })
+        });
+        if (!res) return { ok: false, message: "không có phản hồi sau khi đăng nhập lại" };
+    }
+    if (res.ok) {
+        clearCachedWallet();
+        return { ok: true };
+    }
     var j = parseJson(res) || {};
     var msg = (j.data && j.data.message) || j.message || j.statusMessage || ("HTTP " + res.status);
     return { ok: false, message: String(msg).slice(0, 140) };
 }
 
-function authorName(item) {
-    if (!item) return "N/A";
-    if (item.author && item.author.name) return String(item.author.name).trim();
-    if (item.authorName) return String(item.authorName).trim();
-    if (typeof item.author === "string") return item.author.trim();
-    return "N/A";
-}
-
-function storyTitle(item) {
-    if (!item) return "";
-    return String(item.titleChinese || item.nameChinese || item.title || item.name || "").trim();
-}
-
+// ============ UTILS ============
 function extractStoryId(url) {
-    if (!url) return null;
-    var m = String(url).match(/truyen\/(\d+)/);
+    var m = (url || "").match(/truyen\/(\d+)/);
     return m ? m[1] : null;
 }
 
 function extractChapterIds(url) {
-    if (!url) return null;
-    var m = String(url).match(/truyen\/(\d+)\/(\d+)/);
-    if (!m) return null;
-    return { storyId: m[1], chapterId: m[2] };
+    var m = (url || "").match(/truyen\/(\d+)\/(\d+)/);
+    return m ? { storyId: m[1], chapterId: m[2] } : null;
 }
 
-/**
- * Map sourceUrl host -> crawl API name (/api/models/source)
- * crawl=true: 69shuba, 82zg.com, bookqq, fanqienovel, m.novel.qq.com,
- *             magev6.if.qidian.com, piaotia, trxs, uukanshu
- * crawl=false: faloo, m.qidian.com, qidian.com, ubook.reader.qq.com
- */
+function authorName(item) {
+    if (!item) return "N/A";
+    return (item.author && item.author.name) || item.authorName || (typeof item.author === "string" ? item.author : "N/A");
+}
+
+function storyTitle(item) {
+    if (!item) return "";
+    return item.titleChinese || item.nameChinese || item.title || item.name || "";
+}
+
 function getSourceName(sourceUrl) {
     if (!sourceUrl) return "";
-    var u = String(sourceUrl).toLowerCase();
+    var u = sourceUrl.toLowerCase();
     if (u.indexOf("book.qq.com") >= 0) return "bookqq";
     if (u.indexOf("m.novel.qq.com") >= 0) return "m.novel.qq.com";
     if (u.indexOf("ubook.reader.qq.com") >= 0) return "ubook.reader.qq.com";
@@ -499,13 +521,7 @@ function getSourceName(sourceUrl) {
 
 function formatContent(content) {
     if (!content) return "";
-    var html = String(content);
-    if (html.indexOf("<p") < 0 && html.indexOf("<br") < 0 && html.indexOf("<div") < 0) {
-        html = html
-            .replace(/\r\n/g, "\n")
-            .replace(/\r/g, "\n")
-            .replace(/\n{3,}/g, "\n\n")
-            .replace(/\n/g, "<br>");
-    }
-    return html;
+    var s = String(content);
+    if (s.indexOf("<p") >= 0 || s.indexOf("<br") >= 0 || s.indexOf("<div") >= 0) return s;
+    return s.replace(/\r\n/g, "\n").replace(/\r/g, "\n").replace(/\n{3,}/g, "\n\n").replace(/\n/g, "<br>");
 }

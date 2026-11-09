@@ -1,5 +1,3 @@
-load("config.js");
-
 function execute() {
     return Response.success([
         { title: "Mới cập nhật", input: "home:recent", script: "gen.js" },

@@ -1,20 +1,34 @@
 load("config.js");
 
-// Chapter list API returns titleChinese for every chapter (verified 2026-09-03,
-// 17/17 stories all sources) - no per-chapter scraping needed.
 function execute(url) {
     if (!url) return Response.success([]);
+    var idM = url.match(/truyen\/(\d+)/);
+    if (!idM) return Response.success([]);
+    var storyId = idM[1];
 
-    var storyId = extractStoryId(url);
-    if (!storyId) return Response.success([]);
+    var purchasedMap = {};
+    if (isUserAuthenticated()) {
+        var purchRes = apiFetch("/api/models/user/chapter-purchases?storyId=" + encodeURIComponent(storyId), {
+            referer: BASE_URL + "/truyen/" + storyId
+        });
+        if (purchRes && purchRes.ok) {
+            var pJson = parseJson(purchRes);
+            var pList = (pJson && pJson.data) ? pJson.data : (Array.isArray(pJson) ? pJson : []);
+            for (var p = 0; p < pList.length; p++) {
+                var item = pList[p];
+                if (item) {
+                    var chId = item.chapterId || item.id;
+                    if (chId != null) purchasedMap[chId] = true;
+                }
+            }
+        }
+    }
 
     var data = [];
     var page = 1;
     var total = null;
-    var safety = 0;
 
-    while (safety < 100) {
-        safety++;
+    for (var safety = 0; safety < 100; safety++) {
         var res = apiFetch("/api/models/chapter?storyId=" + encodeURIComponent(storyId) + "&page=" + page, {
             referer: BASE_URL + "/truyen/" + storyId
         });
@@ -27,20 +41,15 @@ function execute(url) {
         for (var i = 0; i < json.chapters.length; i++) {
             var c = json.chapters[i];
             if (!c || !c.id) continue;
-            var cn = c.titleChinese ? String(c.titleChinese).trim() : "";
-            var title = cn || (c.title ? String(c.title).trim() : ("Chương " + (c.number || "")));
-            var price = Number(c.vipPrice);
-            if (!isFinite(price) || price < 0) price = 0;
-            var isVip = c.free === false || price > 0;
-            // vBook renders a pay/lock icon in the chapter list from `pay: true`
-            // (confirmed on device 2026-09-04) - name stays clean, no text tag.
-            // ?su lets chap.js fetch via the light crawl endpoint (~6KB) instead of
-            // /api/models/chapter/{id} (~120KB, 96KB of it unused translatedContent).
+            var isVip = (c.free === false || Number(c.vipPrice) > 0);
+            if (isVip && purchasedMap[c.id]) isVip = false;
+
             var chUrl = BASE_URL + "/truyen/" + storyId + "/" + c.id;
-            var src = c.sourceUrl || "";
-            if (src && getSourceName(src)) chUrl += "?su=" + encodeURIComponent(src);
+            var src = c.sourceUrl;
+            if (!isVip && src && getSourceName(src)) chUrl += "?su=" + encodeURIComponent(src);
+
             data.push({
-                name: title,
+                name: c.titleChinese ? c.titleChinese.trim() : (c.title ? c.title.trim() : ("Chương " + (c.number || ""))),
                 url: chUrl,
                 host: BASE_URL,
                 pay: isVip ? true : undefined

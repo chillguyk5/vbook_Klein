@@ -2,7 +2,7 @@
     "metadata": {
         "name": "Dịch Tiếng Hoa",
         "author": "Klein",
-        "version": 14,
+        "version": 19,
         "source": "https://dichtienghoa.net",
         "regexp": "dichtienghoa\\.(net|com)/truyen/\\d+",
         "description": "Đọc truyện tại Dịch Tiếng Hoa (dichtienghoa.net) — nội dung tiếng Trung gốc",
@@ -22,24 +22,28 @@
     },
     "config": {
         "username": {
-            "title": "Tài khoản (Email/Tên đăng nhập)",
+            "title": "Tài khoản (Tùy chọn nếu đã đăng nhập trên web)",
+            "subtitle": "Có thể để trống nếu đã đăng nhập trực tiếp qua trình duyệt web",
             "mode": "input",
-            "format": "text"
+            "format": "text",
+            "default": ""
         },
         "password": {
-            "title": "Mật khẩu",
+            "title": "Mật khẩu (Tùy chọn nếu đã đăng nhập trên web)",
             "mode": "input",
-            "format": "text"
+            "format": "text",
+            "default": ""
         },
         "auto_buy": {
-            "title": "Tự động mua chương VIP bằng coin",
-            "subtitle": "Chỉ khi đã điền tài khoản và đủ coin",
+            "title": "Chế độ mua chương VIP",
+            "subtitle": "Chế độ 'Hỏi trước khi mua' giúp tránh bị trừ coin ngoài ý muốn",
             "mode": "select",
             "values": [
-                "off=Không tự mua",
-                "on=Tự mua bằng coin"
+                "confirm=Hỏi trước khi mua (Bấm Thử lại để mua)",
+                "on=Tự động mua ngay (Không hỏi)",
+                "off=Tắt (Không tự mua)"
             ],
-            "default": "off",
+            "default": "confirm",
             "format": "single"
         }
     }
