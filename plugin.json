@@ -87,6 +87,18 @@
       "description": "Đọc manhwa, webtoon tại WebtoonScan.com",
       "type": "comic",
       "locale": "vi_VN"
+    },
+    {
+      "name": "AI API Pro",
+      "author": "Klein",
+      "path": "https://raw.githubusercontent.com/chillguyk5/vbook_Klein/main/ai-api-pro/plugin.zip",
+      "lib": "https://raw.githubusercontent.com/chillguyk5/vbook_Klein/main/ai-api-pro/plugin.json",
+      "version": 5,
+      "source": "https://generativelanguage.googleapis.com/v1beta/openai",
+      "icon": "https://raw.githubusercontent.com/chillguyk5/vbook_Klein/main/ai-api-pro/icon.png",
+      "description": "Dịch trọn chương & lọc tên riêng (NER) qua API OpenAI-compatible (Gemini AI Studio, DeepSeek, OpenRouter...); chọn riêng Model dịch/lọc tên, chỉnh mức suy nghĩ, 13 prompt mẫu & 10 từ điển thể loại.",
+      "type": "translate",
+      "locale": "vi_VN"
     }
   ]
 }

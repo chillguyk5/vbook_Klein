@@ -1,0 +1,26 @@
+{
+    "metadata": {
+        "name": "AI API Pro",
+        "author": "Klein",
+        "version": 5,
+        "source": "https://generativelanguage.googleapis.com/v1beta/openai",
+        "description": "Dịch trọn chương & lọc tên riêng (NER) qua API OpenAI-compatible (Gemini AI Studio, DeepSeek, OpenRouter...); chọn riêng Model dịch/lọc tên, chỉnh mức suy nghĩ, 13 prompt mẫu & 10 từ điển thể loại.",
+        "locale": "vi",
+        "language": "javascript",
+        "type": "translate",
+        "encrypt": true
+    },
+    "script": {
+        "config": "config.js",
+        "action": "action.js",
+        "language": "language.js",
+        "model": "model.js",
+        "style": "style.js",
+        "translate": "translate.js"
+    },
+    "config": {
+        "support_auto_detect": false,
+        "max_length": 20000,
+        "max_line": 1000
+    }
+}
